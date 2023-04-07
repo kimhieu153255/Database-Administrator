@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:App"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1200">
+        Title="MainWindow" Height="700" Width="1200" MinHeight="500" MinWidth="800">
     <Window.Resources>
         <Style TargetType="{x:Type DataGridColumnHeader}">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -39,14 +39,14 @@
             </StackPanel>
 
             <!-- Main Screen -->
-            <Grid Grid.Column="1">
+            <Grid Grid.Column="1" Name="mainScreen">
                 <StackPanel HorizontalAlignment="Center" Visibility="Visible">
                     <!--Main content-->
                     <Label Name="LabeMainField" HorizontalAlignment="Center" Height="100" FontSize="40" FontWeight="SemiBold" VerticalContentAlignment="Center">LOGIN</Label>
                     
                     <!--TableGui-->
                     <StackPanel x:Name="TableGui" Visibility="Collapsed">
-                        <DataGrid x:Name="dataTable" AutoGenerateColumns="False" IsEnabled="False"  ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <DataGrid x:Name="dataTable" AutoGenerateColumns="False" ScrollViewer.VerticalScrollBarVisibility="Auto" CanUserResizeColumns="False">
                             <!--ItemsSource="" -->
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="STT" Binding="{Binding Path=STT}" Width="0.1*"/>
@@ -117,6 +117,18 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
+                    
+                    <!--Grant privilege-->
+                    <StackPanel x:Name="Grant" HorizontalAlignment="Center" Width="600" Visibility="Collapsed">
+                        <DataGrid>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn>
+                                    
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    
                 </StackPanel>
             </Grid>
         </Grid>
