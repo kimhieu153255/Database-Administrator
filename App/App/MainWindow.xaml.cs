@@ -45,6 +45,12 @@ namespace App
         public MainWindow()
         {
             InitializeComponent();
+            this.SizeChanged += MainWindow_SizeChanged;
+        }
+
+        private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            dataTable.Height = mainScreen.ActualHeight - 100;
         }
 
         private void Btn_Login_show(object sender, RoutedEventArgs e)
@@ -176,12 +182,13 @@ namespace App
                 {
                     decimal sttOracle = reader.GetDecimal(reader.GetOrdinal("STT"));
                     int stt = Convert.ToInt32(sttOracle);
-                    string fullName = reader.GetString(1);
+                    string fullName = reader.IsDBNull(1) ? "" : reader.GetString(1);
                     string username = reader.GetString(2);
-                    string role = reader.GetString(4);
+                    string role = reader.IsDBNull(4) ? "" : reader.GetString(4);
                     user user = new user(stt, fullName, username, role);
                     list.Add(user);
                 }
+                dataTable.Height = mainScreen.ActualHeight - 100;
                 dataTable.ItemsSource = list;
                 con.Close();
                 con.Dispose();
