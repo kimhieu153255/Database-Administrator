@@ -164,7 +164,7 @@ namespace App
 
         public void displayTableListUser()
         {
-            string conn = $"Data Source=LAPTOP-0HKQUK0U/XEPDB1;User Id={_Username};Password={_Password};";
+            string conn = $"Data Source=Legion5/XEPDB1;User Id={_Username};Password={_Password};";
             OracleConnection con = new OracleConnection(conn);
             try
             {
@@ -204,7 +204,7 @@ namespace App
                 errLabelDelete.Foreground = new SolidColorBrush(Colors.Red);
                 return;
             }
-            string conn = $"Data Source=LAPTOP-0HKQUK0U/XEPDB1;User Id={_Username};Password={_Password};";
+            string conn = $"Data Source=Legion5/XEPDB1;User Id={_Username};Password={_Password};";
             OracleConnection con = new OracleConnection(conn);
             try
             {
@@ -248,7 +248,7 @@ namespace App
                 errLabelDelete.Foreground = new SolidColorBrush(Colors.Red);
                 return;
             }
-            string conn = $"Data Source=LAPTOP-0HKQUK0U/XEPDB1;User Id={_Username};Password={_Password};";
+            string conn = $"Data Source=Legion5/XEPDB1;User Id={_Username};Password={_Password};";
             OracleConnection con = new OracleConnection(conn);
             try
             {
@@ -287,7 +287,7 @@ namespace App
                 errLabel.Foreground = new SolidColorBrush(Colors.Red);
                 return;
             }
-            string connectionString = $"Data Source=LAPTOP-0HKQUK0U/XEPDB1;User Id={username};Password={password};";
+            string connectionString = $"Data Source=Legion5/XEPDB1;User Id={username};Password={password};";
             OracleConnection connection = new(connectionString);
             try
             {
@@ -351,7 +351,7 @@ namespace App
                 return;
             }
 
-            string conn = $"Data Source=LAPTOP-0HKQUK0U/XEPDB1;User Id={_Username};Password={_Password};";
+            string conn = $"Data Source=Legion5/XEPDB1;User Id={_Username};Password={_Password};";
             OracleConnection con = new OracleConnection(conn);
             try
             {
