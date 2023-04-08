@@ -17,12 +17,67 @@ using System.Runtime.InteropServices;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace App
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    public class roleInfor
+    {
+        public string role { get; set; }
+        public string role_id { get; set; }
+
+        public roleInfor(string role = "", string role_id ="")
+        {
+            this.role = role;
+            this.role_id = role_id;
+        }
+    }
+    public class Role
+    {
+        public string grantee { get; set; }
+        public string privilege { get; set; }
+        public string tableName { get; set; }
+        public string grantable { get; set; }
+        public string type { get; set; }
+
+        public Role( string grantee, string privilege, string tableName,string grantable, string type)
+        {
+            this.grantee = grantee;
+            this.privilege = privilege;
+            this.tableName = tableName;
+            this.grantable = grantable;
+            this.type = type;
+        }
+    }
+    public class Table
+    {
+        public string Name { get; set; }
+        public bool Select { get; set; }
+        public bool Insert { get; set; }
+        public bool Update { get; set; } 
+        public bool SelectW { get; set; } 
+        public bool InsertW { get; set; } 
+        public bool UpdateW { get; set; }
+        public bool Delete { get; set; }
+        public bool DeleteW { get; set; }
+
+        public Table(string name, bool select = false, bool insert = false, bool update = false, bool delete = false, bool Sw = false, bool Iw = false, bool Uw = false, bool dW=false)
+        {
+            this.Name = name;
+            this.Select = select;
+            this.Insert = insert;
+            this.Update = update;
+            this.Delete = delete;
+            this.SelectW = Sw;
+            this.InsertW = Iw;
+            this.UpdateW = Uw;
+            this.DeleteW = dW;
+        }
+
+    }
     public class user
     {
         public int STT { get; set; }
@@ -42,15 +97,26 @@ namespace App
     {
         private string _Username { get; set; } = string.Empty;
         private string _Password { get; set; } = string.Empty;
+        private ObservableCollection<Table> listtable { get; set; }
+
+
+
         public MainWindow()
         {
+            listtable = new ObservableCollection<Table>();
+            Table t = new Table("USER_AM");
+            listtable.Add(t);
             InitializeComponent();
             this.SizeChanged += MainWindow_SizeChanged;
         }
 
+
         private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            dataTable.Height = mainScreen.ActualHeight - 100;
+            dataTable.MaxHeight = mainScreen.ActualHeight - 100;
+            dataGrantTable.MaxHeight = mainScreen.ActualHeight - 300;
+            dataPriRole.MaxHeight = mainScreen.ActualHeight - 300;
+            dataRole.MaxHeight = mainScreen.ActualHeight - 300;
         }
 
         private void Btn_Login_show(object sender, RoutedEventArgs e)
@@ -81,41 +147,61 @@ namespace App
         private void changeGuiLogged(string nameGui)
         {
             clean();
+            TableGui.Visibility = Visibility.Collapsed;
+            LoginGui.Visibility = Visibility.Collapsed;
+            RegisterGui.Visibility = Visibility.Collapsed;
+            DeleteGui.Visibility = Visibility.Collapsed;
+            GrantTable.Visibility = Visibility.Collapsed;
+            CreateDeleteRole.Visibility = Visibility.Collapsed;
+            GrantRole.Visibility = Visibility.Collapsed;
+            SearchPriRoleUser.Visibility = Visibility.Collapsed;
+            About.Visibility = Visibility.Collapsed;
             switch (nameGui)
             {
                 case "login":
                     LabeMainField.Content = "LOGIN";
-                    TableGui.Visibility = Visibility.Collapsed;
                     LoginGui.Visibility = Visibility.Visible;
-                    RegisterGui.Visibility = Visibility.Collapsed;
-                    DeleteGui.Visibility = Visibility.Collapsed;
                     break;
                 case "add":
                     LabeMainField.Content = "ADD USER";
-                    TableGui.Visibility = Visibility.Collapsed;
-                    LoginGui.Visibility = Visibility.Collapsed;
                     RegisterGui.Visibility = Visibility.Visible;
-                    DeleteGui.Visibility = Visibility.Collapsed;
                     break;
                 case "delete":
                     LabeMainField.Content = "DELETE USER";
-                    TableGui.Visibility = Visibility.Collapsed;
-                    LoginGui.Visibility = Visibility.Collapsed;
-                    RegisterGui.Visibility = Visibility.Collapsed;
                     DeleteGui.Visibility = Visibility.Visible;
                     break;
                 case "listAM":
                     LabeMainField.Content = "LIST ADMIN";
                     TableGui.Visibility = Visibility.Visible;
-                    LoginGui.Visibility = Visibility.Collapsed;
-                    RegisterGui.Visibility = Visibility.Collapsed;
-                    DeleteGui.Visibility = Visibility.Collapsed;
+                    break;
+                case "GrantPriv":
+                    LabeMainField.Content = "GRANT PRIVILEGES";
+                    GrantTable.Visibility = Visibility.Visible;
+                    break;
+                case "SearchRolePrivUser":
+                    LabeMainField.Content = "SEARCH ROLE/PRIVILEGE OF USER";
+                    SearchPriRoleUser.Visibility = Visibility.Visible;
+                    break;
+                case "CreateDeleteRole":
+                    LabeMainField.Content = "CREATE OR DELETE ROLE";
+                    CreateDeleteRole.Visibility = Visibility.Visible;
+                    break;
+                case "GrantRoleUser":
+                    LabeMainField.Content = "GRANT ROLE TO USER";
+                    GrantRole.Visibility = Visibility.Visible;
+                    break;
+                case "PrivRole":
+                    LabeMainField.Content = "SEARCH PRIVILEGE OF ROLE";
+                    SearchPriRole.Visibility = Visibility.Visible;
+                    break;
+                case "About":
+                    LabeMainField.Content = "About Member of Group 5";
+                    About.Visibility = Visibility.Visible;
                     break;
                 default:
                     break;
             }
         }
-
 
         private void cleanAddGui()
         {
@@ -126,14 +212,12 @@ namespace App
             errLabelAdd.Content = string.Empty;
         }
 
-
         private void cleanLoginGui()
         {
             usernameBox.Clear();
             passwordBox.Clear();
             errLabel.Content = string.Empty;
         }
-
 
         private void cleanDelete()
         {
@@ -144,17 +228,54 @@ namespace App
             errLabelDelete.Visibility = Visibility.Collapsed;
         }
 
+        private void cleanCreateDeleteRole()
+        {
+            nameRoleCreateDelete.Text = string.Empty;
+            errLabelRole.Content = string.Empty;
+            errLabelRole.Visibility = Visibility.Collapsed;
+        }
+
+        private void cleanSearchRole()
+        {
+            dataRole.ItemsSource = string.Empty;
+            dataRole.Visibility = Visibility.Collapsed;
+            nameRoleSearch.Text = string.Empty;
+            dataPriRole.Visibility = Visibility.Collapsed;
+            errLabelSearchRole.Content = string.Empty;
+            errLabelSearchRole.Visibility = Visibility.Collapsed;
+            
+        }
+
+        private void cleanGrantRoleUser()
+        {
+            nameRoleGrant.Text = string.Empty;
+            errLabelGrantRole.Content = string.Empty;
+            errLabelGrantRole.Visibility = Visibility.Collapsed;
+        }
+
+        private void cleanPrivRole()
+        {
+            nameRole.Text = string.Empty;
+            errLabelSearcPrivRole.Content = string.Empty;
+            errLabelSearcPrivRole.Visibility = Visibility.Collapsed;
+            dataPrivRole.ItemsSource = null;
+            dataPrivRole.Visibility = Visibility.Collapsed;
+        }
 
         private void clean()
         {
             cleanDelete();
             cleanLoginGui();
             cleanAddGui();
+            cleanCreateDeleteRole();
+            cleanSearchRole();
+            cleanGrantRoleUser();
+            cleanPrivRole();
         }
-
 
         private void password_changed(object sender, RoutedEventArgs e)
         {
+            errLabelAdd.Visibility = Visibility.Visible;
             if (passwordBoxRegister.Password != againPasswordBoxRegister.Password)
             {
                 errLabelAdd.Content = "Password dont match!!!";
@@ -167,17 +288,17 @@ namespace App
             }
         }
         
-
         public void displayTableListUser()
         {
-            string conn = $"Data Source=LAPTOP-0HKQUK0U/XEPDB1;User Id={_Username};Password={_Password};";
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
             OracleConnection con = new OracleConnection(conn);
             try
             {
                 con.Open();
                 OracleCommand oracleCommand = new OracleCommand("select * from system.USER_AM", con);
                 OracleDataReader reader = oracleCommand.ExecuteReader();
-                BindingList<user> list = new BindingList<user>();
+                BindingList<user> listT = new BindingList<user>();
                 while (reader.Read())
                 {
                     decimal sttOracle = reader.GetDecimal(reader.GetOrdinal("STT"));
@@ -186,10 +307,10 @@ namespace App
                     string username = reader.GetString(2);
                     string role = reader.IsDBNull(4) ? "" : reader.GetString(4);
                     user user = new user(stt, fullName, username, role);
-                    list.Add(user);
+                    listT.Add(user);
                 }
                 dataTable.Height = mainScreen.ActualHeight - 100;
-                dataTable.ItemsSource = list;
+                dataTable.ItemsSource = listT;
                 con.Close();
                 con.Dispose();
             }
@@ -199,7 +320,10 @@ namespace App
             }
         }
 
-
+        private void Btn_About(object sender, RoutedEventArgs e)
+        {
+            changeGuiLogged("About");
+        }
         private void Btn_Search(object sender, RoutedEventArgs e)
         {
             string username = usernameDelete.Text.ToUpper();
@@ -211,7 +335,8 @@ namespace App
                 errLabelDelete.Foreground = new SolidColorBrush(Colors.Red);
                 return;
             }
-            string conn = $"Data Source=LAPTOP-0HKQUK0U/XEPDB1;User Id={_Username};Password={_Password};";
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
             OracleConnection con = new OracleConnection(conn);
             try
             {
@@ -239,7 +364,6 @@ namespace App
 
         }
 
-
         private void Btn_Delete(object sender, RoutedEventArgs e)
         {
             dataTableSearch.Visibility = Visibility.Collapsed;
@@ -255,7 +379,8 @@ namespace App
                 errLabelDelete.Foreground = new SolidColorBrush(Colors.Red);
                 return;
             }
-            string conn = $"Data Source=LAPTOP-0HKQUK0U/XEPDB1;User Id={_Username};Password={_Password};";
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
             OracleConnection con = new OracleConnection(conn);
             try
             {
@@ -281,7 +406,6 @@ namespace App
             }
         }
 
-
         private void Btn_Login(object sender, RoutedEventArgs e)
         {
             string username = usernameBox.Text;
@@ -294,8 +418,9 @@ namespace App
                 errLabel.Foreground = new SolidColorBrush(Colors.Red);
                 return;
             }
-            string connectionString = $"Data Source=LAPTOP-0HKQUK0U/XEPDB1;User Id={username};Password={password};";
-            OracleConnection connection = new(connectionString);
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={username};Password={password};";
+            OracleConnection connection = new(conn);
             try
             {
                 connection.Open();
@@ -321,7 +446,6 @@ namespace App
             }
         }
 
-
         private void Btn_Logout(object sender, RoutedEventArgs e)
         {
             _Username = string.Empty;
@@ -331,7 +455,6 @@ namespace App
             startPanel.Visibility = Visibility.Visible;
             LoggedPanel.Visibility = Visibility.Collapsed;
         }
-
 
         private void Btn_Add(object sender, RoutedEventArgs e)
         {
@@ -358,7 +481,8 @@ namespace App
                 return;
             }
 
-            string conn = $"Data Source=LAPTOP-0HKQUK0U/XEPDB1;User Id={_Username};Password={_Password};";
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
             OracleConnection con = new OracleConnection(conn);
             try
             {
@@ -382,9 +506,378 @@ namespace App
             }
             catch (Exception)
             {
-                errLabelAdd.Content = "User already exists!";
+                errLabelAdd.Content = "Can't add user!";
                 errLabelAdd.Foreground = new SolidColorBrush(Colors.Red);
             }
+        }
+
+        private void Btn_GrantRevoke_Show(object sender, RoutedEventArgs e)
+        {
+            changeGuiLogged("GrantPriv");
+            displayTableRole();
+            dataGrantTable.Visibility = Visibility.Visible;
+        }
+
+        private void Btn_Revoke(object sender, RoutedEventArgs e)
+        {
+            GrantRevokePrivTable(false);
+        }
+
+        private void Btn_Grant(object sender, RoutedEventArgs e)
+        {
+            GrantRevokePrivTable(true);
+        }
+
+        private void Btn_CreateDeleteRole_Show(object sender, RoutedEventArgs e)
+        {
+            changeGuiLogged("CreateDeleteRole");
+        }
+
+        
+        private void Btn_GrantRoleUser_Show(object sender, RoutedEventArgs e)
+        {
+            changeGuiLogged("GrantRoleUser");
+        } 
+
+        private void Btn_SearchRole_Show(object sender, RoutedEventArgs e)
+        {
+            changeGuiLogged("SearchRolePrivUser");
+        }
+
+        private void Btn_DeleteRole(object sender, RoutedEventArgs e)
+        {
+            string roleName = nameRoleCreateDelete.Text;
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            OracleConnection con = new OracleConnection(conn);
+            try
+            {
+                con.Open(); 
+                OracleCommand oracleCommand = new OracleCommand("SYSTEM.DELETE_ROLE", con);
+                oracleCommand.CommandType = CommandType.StoredProcedure;
+                oracleCommand.Parameters.Add("ROLE_NAME", OracleDbType.Varchar2).Value = roleName;
+                oracleCommand.Parameters.Add("RESULT", OracleDbType.Varchar2, 40).Direction = ParameterDirection.Output;
+                oracleCommand.ExecuteNonQuery();
+                string resultvalue = (string)oracleCommand.Parameters["RESULT"].Value.ToString();
+                con.Close();
+                con.Dispose();
+                errLabelRole.Content = resultvalue;
+                errLabelRole.Visibility = Visibility.Visible;
+                if (resultvalue == "SUCCESS DELETE ROLE")
+                    errLabelRole.Foreground = new SolidColorBrush(Colors.Green);
+                else
+                    errLabelRole.Foreground = new SolidColorBrush(Colors.Red);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+        }
+
+        private void Btn_PrivRole_Show(object sender, RoutedEventArgs e)
+        {
+            changeGuiLogged("PrivRole");
+        }
+        private void Btn_CreateRole(object sender, RoutedEventArgs e)
+        {
+            string roleName = nameRoleCreateDelete.Text;
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            OracleConnection con = new OracleConnection(conn);
+            try
+            {
+                con.Open();
+                OracleCommand oracleCommand = new OracleCommand("SYSTEM.CREATE_ROLE", con);
+                oracleCommand.CommandType = CommandType.StoredProcedure;
+                oracleCommand.Parameters.Add("ROLE_NAME", OracleDbType.Varchar2).Value = roleName;
+                oracleCommand.Parameters.Add("RESULT", OracleDbType.Varchar2, 200).Direction = ParameterDirection.Output;
+                oracleCommand.ExecuteNonQuery();
+                string resultvalue = (string) oracleCommand.Parameters["RESULT"].Value.ToString();
+                con.Close();
+                con.Dispose();
+                errLabelRole.Content = resultvalue;
+                errLabelRole.Visibility = Visibility.Visible;
+                if (resultvalue == "SUCCESS CREATE ROLE")
+                    errLabelRole.Foreground = new SolidColorBrush(Colors.Green);
+                else
+                    errLabelRole.Foreground = new SolidColorBrush(Colors.Red);
+            }
+            catch (Exception ex)
+            {
+                errLabelRole.Content = ex.Message;
+                errLabelRole.Visibility = Visibility.Visible;
+                return;
+            }
+        }
+        
+
+        private void Btn_SearchRole(object sender, RoutedEventArgs e)
+        {
+            dataPriRole.Visibility = Visibility.Collapsed;
+            string name = nameRoleSearch.Text;
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            OracleConnection con = new OracleConnection(conn);
+            try
+            {
+                con.Open();
+                //SELECT * FROM system.dba_role_privs where Granted_role ='KIMHIEU';
+                OracleCommand oracleCommand = new OracleCommand($"SELECT * FROM DBA_ROLES WHERE ROLE = UPPER('{name}')", con);
+                OracleDataReader reader = oracleCommand.ExecuteReader();
+                BindingList<roleInfor> roleList = new BindingList<roleInfor>();
+                while (reader.Read())
+                {
+                    string role = reader.GetString(0);
+                    string roleId = reader.GetString(1);
+                    roleInfor r = new roleInfor(role, roleId);
+                    roleList.Add(r);
+                }
+                if (roleList.Count() != 0)
+                {
+                    dataRole.ItemsSource = roleList;
+                    dataRole.Visibility = Visibility.Visible;
+                    errLabelSearchRole.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    errLabelSearchRole.Content = "Role isn't exists!";
+                    errLabelSearchRole.Foreground = new SolidColorBrush(Colors.Red);
+                    errLabelSearchRole.Visibility = Visibility.Visible;
+                }
+                con.Close();
+                con.Dispose();
+            }
+            catch (Exception ex)
+            {
+                errLabelSearchRole.Content = ex.Message;
+                errLabelSearchRole.Visibility = Visibility.Visible;
+                return;
+            }
+        }
+
+        private void Btn_SearchRoleUser(object sender, RoutedEventArgs e)
+        {
+            dataPrivRole.Visibility = Visibility.Collapsed;
+            string name = nameRole.Text;
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            OracleConnection con = new OracleConnection(conn);
+            try
+            {
+                con.Open();
+                OracleCommand oracleCommand = new OracleCommand($"SELECT * FROM sys.dba_role_privs where grantee = UPPER('{name}')", con);
+                OracleDataReader reader = oracleCommand.ExecuteReader();
+                BindingList<roleInfor> roleList = new BindingList<roleInfor>();
+                while (reader.Read())
+                {
+                    string grated_role = reader.GetString(1);
+                    string adminOption = reader.GetString(2);
+                    roleInfor r = new roleInfor(grated_role, adminOption);
+                    roleList.Add(r);
+                }
+                if (roleList.Count() != 0)
+                {
+                    dataPrivRole.Visibility = Visibility.Visible;
+                    dataPrivRole.ItemsSource = roleList;
+                }
+                else
+                {
+                    errLabelSearcPrivRole.Content = "Role isn't exists!";
+                    errLabelSearcPrivRole.Foreground = new SolidColorBrush(Colors.Red);
+                    errLabelSearcPrivRole.Visibility = Visibility.Visible;
+                }
+                con.Close();
+                con.Dispose();
+            }
+            catch (Exception ex)
+            {
+                errLabelSearchRole.Content = ex.Message;
+                errLabelSearchRole.Visibility = Visibility.Visible;
+                return;
+            }
+        }
+        private void Btn_SearchPrivilege(object sender, RoutedEventArgs e)
+        {
+            dataRole.Visibility= Visibility.Collapsed;
+            string name = nameRoleSearch.Text;
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            OracleConnection con = new OracleConnection(conn);
+            try
+            {
+                con.Open();
+                OracleCommand oracleCommand = new OracleCommand($"SELECT * FROM DBA_TAB_PRIVS WHERE GRANTEE = UPPER('{name}') AND (TYPE = 'TABLE' OR TYPE = 'VIEW')", con);
+                OracleDataReader reader = oracleCommand.ExecuteReader();
+                BindingList<Role> roleList = new BindingList<Role>();
+                while (reader.Read())
+                {
+                    string grantee = reader.GetString(0);
+                    string tableName = reader.GetString(2);
+                    string privilege = reader.GetString(4);
+                    string grantable = reader.GetString(5);
+                    string type = reader.GetString(8);
+                    Role r = new Role(grantee,privilege,tableName,grantable,type);
+                    roleList.Add(r);
+                }
+                if (roleList.Count() != 0)
+                {
+                    dataPriRole.Visibility = Visibility.Visible;
+                    dataPriRole.ItemsSource = roleList;
+                    errLabelSearchRole.Visibility = Visibility.Collapsed;
+                }
+                else { 
+                    errLabelSearchRole.Content = "Role doesn't have any privileges";
+                    errLabelSearchRole.Foreground = new SolidColorBrush(Colors.Red);
+                    errLabelSearchRole.Visibility = Visibility.Visible;
+                }
+                con.Close();
+                con.Dispose();
+            }
+            catch (Exception)
+            {
+                return;
+            }
+        }
+
+        private void Btn_GrantRoleUser(object sender, RoutedEventArgs e)
+        {
+            string roleName = nameRoleGrant.Text;
+            string username = nameUser.Text;
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            OracleConnection con = new OracleConnection(conn);
+            try
+            {
+                con.Open();
+                OracleCommand oracleCommand = new OracleCommand("SYSTEM.GRANT_ROLE_TO_USER", con);
+                oracleCommand.CommandType = CommandType.StoredProcedure;
+                oracleCommand.Parameters.Add("ROLE_NAME", OracleDbType.Varchar2).Value = roleName;
+                oracleCommand.Parameters.Add("USER_NAME", OracleDbType.Varchar2).Value = username;
+                oracleCommand.Parameters.Add("RESULT", OracleDbType.Varchar2, 200).Direction = ParameterDirection.Output;
+                oracleCommand.ExecuteNonQuery();
+                string resultvalue = (string)oracleCommand.Parameters["RESULT"].Value.ToString();
+                con.Close();
+                con.Dispose();
+                errLabelGrantRole.Content = resultvalue;
+                errLabelGrantRole.Visibility = Visibility.Visible;
+                if (resultvalue == "SUCCESS")
+                    errLabelGrantRole.Foreground = new SolidColorBrush(Colors.Green);
+                else
+                    errLabelGrantRole.Foreground = new SolidColorBrush(Colors.Red);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
+        }
+
+        private string GrantPrivilege(bool t,string priv, string nameObject, string nameTable, int flag)
+        {
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            OracleConnection con = new OracleConnection(conn);
+            try
+            {
+                con.Open();
+                OracleCommand oracleCommand = t ? new OracleCommand("SYSTEM.GRANT_PRIVS_TAB_USER_OR_ROLE", con) : new OracleCommand("SYSTEM.REVOKE_PRIVS_VIEW_USER_OR_ROLE", con);
+                oracleCommand.CommandType = CommandType.StoredProcedure;
+                MessageBox.Show(oracleCommand.Connection.ToString() + " "+ t.ToString());
+                oracleCommand.Parameters.Add("NAME", OracleDbType.Varchar2).Value = nameObject;
+                oracleCommand.Parameters.Add("PRIVS", OracleDbType.Varchar2).Value = priv;
+                oracleCommand.Parameters.Add("TAB_NAME", OracleDbType.Varchar2).Value = nameTable;
+                oracleCommand.Parameters.Add("WITH_GRANT_OPTION", OracleDbType.Int16).Value = flag;
+                oracleCommand.Parameters.Add("RESULT", OracleDbType.Varchar2, 40).Direction = ParameterDirection.Output;
+                oracleCommand.ExecuteNonQuery();
+                string resultvalue = (string)oracleCommand.Parameters["RESULT"].Value.ToString();
+                con.Close();
+                con.Dispose();
+                if (resultvalue == "SUCCESS")
+                    return "";
+                else
+                    return resultvalue;
+            }
+            catch (Exception)
+            {
+                return "Privilege doesn't grant to user or role!";
+            }
+        }
+
+        private void GrantRevokePrivTable(bool flag)
+        {
+            string nameObject = nameUserRole.Text;
+            BindingList<string> listError = new BindingList<string>();
+            foreach (Table table in dataGrantTable.Items) 
+            {
+                string name = table.Name;
+                MessageBox.Show(name);
+                bool select = table.Select;
+                if (select)
+                {
+                    string err = GrantPrivilege(flag, "Select", nameObject, name, 0);
+                    if (err != "")
+                        listError.Add(err);
+                }
+
+                bool insert = table.Insert;
+                if (insert)
+                {
+                    string err = GrantPrivilege(flag, "insert", nameObject, name, 0);
+                    if (err != "")
+                        listError.Add(err);
+                }
+                bool update = table.Update;
+                if (update)
+                {
+                    string err = GrantPrivilege(flag, "update", nameObject, name, 0);
+                    if (err != "")
+                        listError.Add(err);
+                }
+                bool delete = table.Delete;
+                if (delete)
+                {
+                    string err = GrantPrivilege(flag, "delete", nameObject, name, 0);
+                    if (err != "")
+                        listError.Add(err);
+                }
+                bool selectW = table.SelectW;
+                if (selectW)
+                {
+                    string err = GrantPrivilege(flag, "Select", nameObject, name, 1);
+                    if (err != "")
+                        listError.Add(err);
+                }
+                bool insertW = table.InsertW;
+                if (insertW)
+                {
+                    string err = GrantPrivilege(flag, "insert", nameObject, name, 1);
+                    if (err != "")
+                        listError.Add(err);
+                }
+                bool updateW = table.UpdateW;
+                if (updateW)
+                {
+                    string err = GrantPrivilege(flag, "update", nameObject, name, 1);
+                    if (err != "")
+                        listError.Add(err);
+                }
+                bool deleteW = table.DeleteW;
+                if (deleteW)
+                {
+                    string err = GrantPrivilege(flag, "delete", nameObject, name, 1);
+                    if (err != "")
+                        listError.Add(err);
+                }
+                MessageBox.Show(select + " " + insert);
+                dataRoleErr.ItemsSource = listError;
+                dataRoleErr.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void displayTableRole()
+        {
+            dataGrantTable.ItemsSource = listtable;
+            dataRoleErr.Visibility = Visibility.Collapsed;
         }
     }
 }
