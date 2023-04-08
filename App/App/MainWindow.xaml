@@ -194,7 +194,7 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <!--Search role-->
+                    <!--Search role/priv user-->
                     <StackPanel x:Name="SearchPriRoleUser" HorizontalAlignment="Center" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center" Margin="0,0,0,10">
                             <TextBlock Text="Name role" VerticalAlignment="Center" Margin="0,0,10,0" Width="90" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
