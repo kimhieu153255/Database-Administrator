@@ -498,8 +498,8 @@ namespace App
                 OracleCommand oracleCommand = new OracleCommand("SYSTEM.USER_REGISTER", con);
 
                 oracleCommand.CommandType = CommandType.StoredProcedure;
-                oracleCommand.Parameters.Add("username", OracleDbType.Varchar2).Value = username;
                 oracleCommand.Parameters.Add("fullname", OracleDbType.Varchar2).Value = fullname;
+                oracleCommand.Parameters.Add("username", OracleDbType.Varchar2).Value = username;
                 oracleCommand.Parameters.Add("password", OracleDbType.Varchar2).Value = password;
                 oracleCommand.Parameters.Add("RESULT", OracleDbType.Varchar2, 40).Direction = ParameterDirection.Output;
                 oracleCommand.ExecuteNonQuery();
@@ -819,7 +819,7 @@ namespace App
             try
             {
                 con.Open();
-                OracleCommand oracleCommand = t ? new OracleCommand("SYSTEM.GRANT_PRIVS_TAB_USER_OR_ROLE", con) : new OracleCommand("SYSTEM.REVOKE_PRIVS_VIEW_USER_OR_ROLE", con);
+                OracleCommand oracleCommand = t ? new OracleCommand("SYSTEM.GRANT_PRIVS_TAB_USER_OR_ROLE", con) : new OracleCommand("SYSTEM.REVOKE_PRIVS_TABLE_USER_OR_ROLE", con);
                 oracleCommand.CommandType = CommandType.StoredProcedure;
                 oracleCommand.Parameters.Add("NAME", OracleDbType.Varchar2).Value = nameObject;
                 oracleCommand.Parameters.Add("PRIVS", OracleDbType.Varchar2).Value = priv;
