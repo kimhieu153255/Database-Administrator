@@ -106,6 +106,10 @@ namespace App
             listtable = new ObservableCollection<Table>();
             Table t = new Table("USER_AM");
             listtable.Add(t);
+            listtable.Add(new Table("NHANVIEN"));
+            listtable.Add(new Table("DEAN"));
+            listtable.Add(new Table("PHONGBAN"));
+            listtable.Add(new Table("PHANCONG"));
             InitializeComponent();
             this.SizeChanged += MainWindow_SizeChanged;
         }
