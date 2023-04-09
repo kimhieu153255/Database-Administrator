@@ -59,9 +59,9 @@
                     <Button Content="Delete" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_Delete_Show" />
                     <Button Content="Grant/Revoke" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_GrantRevoke_Show"/>
                     <Button Content="Create/Delete Role" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_CreateDeleteRole_Show"/>
-                    <Button Content="Search for User" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_SearchRole_Show"/>
-                    <Button Content="Grant Role to User" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_GrantRoleUser_Show"/>
-                    <Button Content="Search of Role" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_PrivRole_Show"/>
+                    <Button Content="Privilege Of Role/user" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_SearchRole_Show"/>
+                    <Button Content="Grant/Revoke Role(User)" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_GrantRoleUser_Show"/>
+                    <Button Content="Role of User" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_PrivRole_Show"/>
                     <Button Content="Logout" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_Logout"/>
                 </StackPanel>
             </StackPanel>
@@ -72,7 +72,7 @@
                     <!--Main content-->
                     <Label Name="LabeMainField" HorizontalAlignment="Center" Height="100" FontSize="40" FontWeight="SemiBold" VerticalContentAlignment="Center">LOGIN</Label>
                     <!--About Team-->
-                    <StackPanel x:Name="About" HorizontalAlignment="Center" Width="600" Visibility="Collapsed">
+                    <StackPanel x:Name="About" HorizontalAlignment="Center" Width="600" Visibility="Collapsed" Margin="0,30,0,0">
                         <Label Margin="0,0,0,10" FontSize="25" FontWeight="SemiBold" Content="20120264 - Trần Hải Đăng" HorizontalContentAlignment="Center"/>
                         <Label Margin="0,0,0,10" FontSize="25" FontWeight="SemiBold" Content="20120474 - Lê Kim Hiếu" HorizontalContentAlignment="Center"/>
                         <Label Margin="0,0,0,10" FontSize="25" FontWeight="SemiBold" Content="20120492 - Đỗ Đăng Huy" HorizontalContentAlignment="Center"/>
@@ -162,14 +162,14 @@
                         <DataGrid x:Name="dataGrantTable" AutoGenerateColumns="False" ScrollViewer.VerticalScrollBarVisibility="Auto" CanUserResizeColumns="False">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Table" Binding="{Binding Name}" Width="0.4*"/>
-                                <DataGridCheckBoxColumn Header="SELECT" Binding="{Binding Select}" Width="0.3*" ElementStyle="{StaticResource checkbox}"/>
-                                <DataGridCheckBoxColumn Header="SELECT (with grant option)" Binding="{Binding SelectW}" Width="0.3*" HeaderStyle="{StaticResource WrappedHeaderStyle}" ElementStyle="{StaticResource checkbox}"/>
-                                <DataGridCheckBoxColumn Header="INSERT" Binding="{Binding Insert}" Width="0.3*" ElementStyle="{StaticResource checkbox}"/>
-                                <DataGridCheckBoxColumn Header="INSERT (with grant option)" Binding="{Binding InsertW}" Width="0.3*" HeaderStyle="{StaticResource WrappedHeaderStyle}" ElementStyle="{StaticResource checkbox}"/>
-                                <DataGridCheckBoxColumn Header="UPDATE" Binding="{Binding Update}" Width="0.3*" ElementStyle="{StaticResource checkbox}"/>
-                                <DataGridCheckBoxColumn Header="UPDATE (With grant option)" Binding="{Binding UpdateW}" Width="0.3*"  HeaderStyle="{StaticResource WrappedHeaderStyle}" ElementStyle="{StaticResource checkbox}"/>
-                                <DataGridCheckBoxColumn Header="Delete" Binding="{Binding Delete}" Width="0.3*" ElementStyle="{StaticResource checkbox}"/>
-                                <DataGridCheckBoxColumn Header="Delete (With grant option)" Binding="{Binding DeleteW}" Width="0.3*"  HeaderStyle="{StaticResource WrappedHeaderStyle}" ElementStyle="{StaticResource checkbox}"/>
+                                <DataGridCheckBoxColumn Header="SELECT" Binding="{Binding Select, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="0.3*" ElementStyle="{StaticResource checkbox}"/>
+                                <DataGridCheckBoxColumn Header="SELECT (with grant option)" Binding="{Binding SelectW, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="0.3*" HeaderStyle="{StaticResource WrappedHeaderStyle}" ElementStyle="{StaticResource checkbox}"/>
+                                <DataGridCheckBoxColumn Header="INSERT" Binding="{Binding Insert, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="0.3*" ElementStyle="{StaticResource checkbox}"/>
+                                <DataGridCheckBoxColumn Header="INSERT (with grant option)" Binding="{Binding InsertW, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="0.3*" HeaderStyle="{StaticResource WrappedHeaderStyle}" ElementStyle="{StaticResource checkbox}"/>
+                                <DataGridCheckBoxColumn Header="UPDATE" Binding="{Binding Update, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="0.3*" ElementStyle="{StaticResource checkbox}"/>
+                                <DataGridCheckBoxColumn Header="UPDATE (With grant option)" Binding="{Binding UpdateW, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="0.3*"  HeaderStyle="{StaticResource WrappedHeaderStyle}" ElementStyle="{StaticResource checkbox}"/>
+                                <DataGridCheckBoxColumn Header="Delete" Binding="{Binding Delete, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="0.3*" ElementStyle="{StaticResource checkbox}"/>
+                                <DataGridCheckBoxColumn Header="Delete (With grant option)" Binding="{Binding DeleteW, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="0.3*"  HeaderStyle="{StaticResource WrappedHeaderStyle}" ElementStyle="{StaticResource checkbox}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,10" HorizontalAlignment="Center" >
@@ -197,10 +197,10 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <!--Search role/priv user-->
+                    <!--Search priv of role/user-->
                     <StackPanel x:Name="SearchPriRoleUser" HorizontalAlignment="Center" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center" Margin="0,0,0,10">
-                            <TextBlock Text="Name role" VerticalAlignment="Center" Margin="0,0,10,0" Width="90" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBlock Text="Name role/user" VerticalAlignment="Center" Margin="0,0,10,0" Width="150" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
                             <TextBox Name="nameRoleSearch"  HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="50" Width="400" Background="Transparent" VerticalContentAlignment="Center"/>
                         </StackPanel>
                         <Label Name="errLabelSearchRole" Margin="0,0,0,10" Width="500" Visibility="Collapsed" FontWeight="SemiBold"/>    
@@ -225,7 +225,7 @@
                         </DataGrid>
                     </StackPanel>
                     
-                    <!--priv of role-->
+                    <!--role of user-->
                     <StackPanel x:Name="SearchPriRole" HorizontalAlignment="Center" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center" Margin="0,0,0,10">
                             <TextBlock Text="Username" VerticalAlignment="Center" Margin="0,0,10,0" Width="90" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
@@ -241,7 +241,7 @@
                         </DataGrid>
                     </StackPanel>
 
-                    <!--Grant role to user-->
+                    <!--Grant/revoke role to user-->
                     <StackPanel x:Name="GrantRole" HorizontalAlignment="Center" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center" Margin="0,0,0,10">
                             <TextBlock Text="Name role" VerticalAlignment="Center" Margin="0,0,10,0" Width="90" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
@@ -251,7 +251,10 @@
                             <TextBlock Text="Username" VerticalAlignment="Center" Margin="0,0,10,0" Width="90" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
                             <TextBox Name="nameUser" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="50" Width="400" Background="Transparent" VerticalContentAlignment="Center"/>
                         </StackPanel>
-                        <Button Width="100" Content="Create" Height="50" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,10" Click="Btn_GrantRoleUser"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+                            <Button Width="100" Content="Grant" Height="50" FontSize="16" FontWeight="SemiBold" Margin="0,0,5,10" Click="Btn_GrantRoleUser"/>
+                            <Button Width="100" Content="Revoke" Height="50" FontSize="16" FontWeight="SemiBold" Margin="5,0,0,10" Click="Btn_RevokeRoleUser"/>
+                        </StackPanel>
                         <Label Name="errLabelGrantRole" Visibility="Collapsed"/>
                     </StackPanel>
                 </StackPanel>

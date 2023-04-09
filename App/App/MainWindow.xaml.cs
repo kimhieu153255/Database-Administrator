@@ -93,7 +93,7 @@ namespace App
             this.role = role;
         }
      }
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window,INotifyPropertyChanged
     {
         private string _Username { get; set; } = string.Empty;
         private string _Password { get; set; } = string.Empty;
@@ -114,6 +114,7 @@ namespace App
             this.SizeChanged += MainWindow_SizeChanged;
         }
 
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -183,7 +184,7 @@ namespace App
                     GrantTable.Visibility = Visibility.Visible;
                     break;
                 case "SearchRolePrivUser":
-                    LabeMainField.Content = "SEARCH ROLE/PRIVILEGE OF USER";
+                    LabeMainField.Content = "SEARCH PRIVILEGE OF ROLE OR USER";
                     SearchPriRoleUser.Visibility = Visibility.Visible;
                     break;
                 case "CreateDeleteRole":
@@ -195,7 +196,7 @@ namespace App
                     GrantRole.Visibility = Visibility.Visible;
                     break;
                 case "PrivRole":
-                    LabeMainField.Content = "SEARCH PRIVILEGE OF ROLE";
+                    LabeMainField.Content = "SEARCH ROLE OF USER";
                     SearchPriRole.Visibility = Visibility.Visible;
                     break;
                 case "About":
@@ -746,6 +747,37 @@ namespace App
             }
         }
 
+        private void Btn_RevokeRoleUser(object sender, RoutedEventArgs e)
+        {
+            string roleName = nameRoleGrant.Text;
+            string username = nameUser.Text;
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            OracleConnection con = new OracleConnection(conn);
+            try
+            {
+                con.Open();
+                OracleCommand oracleCommand = new OracleCommand("SYSTEM.REVOKE_ROLE_TO_USER", con);
+                oracleCommand.CommandType = CommandType.StoredProcedure;
+                oracleCommand.Parameters.Add("ROLE_NAME", OracleDbType.Varchar2).Value = roleName;
+                oracleCommand.Parameters.Add("USER_NAME", OracleDbType.Varchar2).Value = username;
+                oracleCommand.Parameters.Add("RESULT", OracleDbType.Varchar2, 200).Direction = ParameterDirection.Output;
+                oracleCommand.ExecuteNonQuery();
+                string resultvalue = (string)oracleCommand.Parameters["RESULT"].Value.ToString();
+                con.Close();
+                con.Dispose();
+                errLabelGrantRole.Content = resultvalue;
+                errLabelGrantRole.Visibility = Visibility.Visible;
+                if (resultvalue == "SUCCESS")
+                    errLabelGrantRole.Foreground = new SolidColorBrush(Colors.Green);
+                else
+                    errLabelGrantRole.Foreground = new SolidColorBrush(Colors.Red);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+        }
         private void Btn_GrantRoleUser(object sender, RoutedEventArgs e)
         {
             string roleName = nameRoleGrant.Text;
@@ -827,21 +859,21 @@ namespace App
                 bool insert = table.Insert;
                 if (insert)
                 {
-                    string err = GrantPrivilege(flag, "insert", nameObject, name, 0);
+                    string err = GrantPrivilege(flag, "Insert", nameObject, name, 0);
                     if (err != "")
                         listError.Add(err);
                 }
                 bool update = table.Update;
                 if (update)
                 {
-                    string err = GrantPrivilege(flag, "update", nameObject, name, 0);
+                    string err = GrantPrivilege(flag, "Update", nameObject, name, 0);
                     if (err != "")
                         listError.Add(err);
                 }
                 bool delete = table.Delete;
                 if (delete)
                 {
-                    string err = GrantPrivilege(flag, "delete", nameObject, name, 0);
+                    string err = GrantPrivilege(flag, "Delete", nameObject, name, 0);
                     if (err != "")
                         listError.Add(err);
                 }
@@ -855,24 +887,25 @@ namespace App
                 bool insertW = table.InsertW;
                 if (insertW)
                 {
-                    string err = GrantPrivilege(flag, "insert", nameObject, name, 1);
+                    string err = GrantPrivilege(flag, "Insert", nameObject, name, 1);
                     if (err != "")
                         listError.Add(err);
                 }
                 bool updateW = table.UpdateW;
                 if (updateW)
                 {
-                    string err = GrantPrivilege(flag, "update", nameObject, name, 1);
+                    string err = GrantPrivilege(flag, "Update", nameObject, name, 1);
                     if (err != "")
                         listError.Add(err);
                 }
                 bool deleteW = table.DeleteW;
                 if (deleteW)
                 {
-                    string err = GrantPrivilege(flag, "delete", nameObject, name, 1);
+                    string err = GrantPrivilege(flag, "Delete", nameObject, name, 1);
                     if (err != "")
                         listError.Add(err);
                 }
+                MessageBox.Show(name + " " + select+" "+insert+" "+update+" "+delete);
                 dataRoleErr.ItemsSource = listError;
                 dataRoleErr.Visibility = Visibility.Visible;
             }
