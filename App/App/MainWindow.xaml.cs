@@ -260,6 +260,8 @@ namespace App
             errLabelSearcPrivRole.Visibility = Visibility.Collapsed;
             dataPrivRole.ItemsSource = null;
             dataPrivRole.Visibility = Visibility.Collapsed;
+
+            SearchPriRole.Visibility = Visibility.Collapsed;
         }
 
         private void clean()
