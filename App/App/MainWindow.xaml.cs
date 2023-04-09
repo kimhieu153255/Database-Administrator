@@ -789,7 +789,6 @@ namespace App
                 con.Open();
                 OracleCommand oracleCommand = t ? new OracleCommand("SYSTEM.GRANT_PRIVS_TAB_USER_OR_ROLE", con) : new OracleCommand("SYSTEM.REVOKE_PRIVS_VIEW_USER_OR_ROLE", con);
                 oracleCommand.CommandType = CommandType.StoredProcedure;
-                MessageBox.Show(oracleCommand.Connection.ToString() + " "+ t.ToString());
                 oracleCommand.Parameters.Add("NAME", OracleDbType.Varchar2).Value = nameObject;
                 oracleCommand.Parameters.Add("PRIVS", OracleDbType.Varchar2).Value = priv;
                 oracleCommand.Parameters.Add("TAB_NAME", OracleDbType.Varchar2).Value = nameTable;
@@ -817,7 +816,6 @@ namespace App
             foreach (Table table in dataGrantTable.Items) 
             {
                 string name = table.Name;
-                MessageBox.Show(name);
                 bool select = table.Select;
                 if (select)
                 {
@@ -875,7 +873,6 @@ namespace App
                     if (err != "")
                         listError.Add(err);
                 }
-                MessageBox.Show(select + " " + insert);
                 dataRoleErr.ItemsSource = listError;
                 dataRoleErr.Visibility = Visibility.Visible;
             }
