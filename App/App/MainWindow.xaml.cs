@@ -450,7 +450,8 @@ namespace App
         {
             _Username = string.Empty;
             _Password = string.Empty;
-            Btn_Login_show(sender, e);
+            changeGuiLogged("login");
+            SearchPriRole.Visibility = Visibility.Collapsed;
             //sidebar
             startPanel.Visibility = Visibility.Visible;
             LoggedPanel.Visibility = Visibility.Collapsed;

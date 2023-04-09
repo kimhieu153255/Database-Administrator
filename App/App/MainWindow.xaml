@@ -73,7 +73,10 @@
                     <Label Name="LabeMainField" HorizontalAlignment="Center" Height="100" FontSize="40" FontWeight="SemiBold" VerticalContentAlignment="Center">LOGIN</Label>
                     <!--About Team-->
                     <StackPanel x:Name="About" HorizontalAlignment="Center" Width="600" Visibility="Collapsed">
-                        <Label Margin="0,0,0,10" FontSize="25" FontWeight="SemiBold" Content="20120474-Lê Kim Hiếu" HorizontalContentAlignment="Center"/>
+                        <Label Margin="0,0,0,10" FontSize="25" FontWeight="SemiBold" Content="20120264 - Trần Hải Đăng" HorizontalContentAlignment="Center"/>
+                        <Label Margin="0,0,0,10" FontSize="25" FontWeight="SemiBold" Content="20120474 - Lê Kim Hiếu" HorizontalContentAlignment="Center"/>
+                        <Label Margin="0,0,0,10" FontSize="25" FontWeight="SemiBold" Content="20120492 - Đỗ Đăng Huy" HorizontalContentAlignment="Center"/>
+                        <Label Margin="0,0,0,10" FontSize="25" FontWeight="SemiBold" Content="20120493 - Huỳnh Trần Quang Huy" HorizontalContentAlignment="Center"/>
                     </StackPanel>
                     <!--TableGui-->
                     <StackPanel x:Name="TableGui" Visibility="Collapsed">
