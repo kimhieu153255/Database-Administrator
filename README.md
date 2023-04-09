@@ -1,6 +1,6 @@
 # Database-Administrator
 
-## Member of Group 05:
+## Member of Group 05 - HCMUS:
 
 - 20120264 - Trần Hải Đăng
 - 20120474 - Lê Kim Hiếu
