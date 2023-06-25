@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:App"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1200" MinHeight="500" MinWidth="800">
+        Title="MainWindow" Height="700" Width="1200" MinHeight="500" MinWidth="1000">
     <Window.Resources>
         <Style TargetType="{x:Type DataGridColumnHeader}">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -53,7 +53,7 @@
                     <Button Content="Login" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_Login_show" />
                     <Button Content="About" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_About"/>
                 </StackPanel>
-                <StackPanel VerticalAlignment="Center" Margin="0,30,0,0" x:Name="LoggedPanel" Visibility="Collapsed">
+                <StackPanel VerticalAlignment="Center" Margin="0,30,0,0" x:Name="AdminPanel" Visibility="Collapsed">
                     <Button Content="List Admin" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_ListAdmin_Show"/>
                     <Button Content="Add" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_Add_show" />
                     <Button Content="Delete" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_Delete_Show" />
@@ -64,11 +64,20 @@
                     <Button Content="Role of User" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_PrivRole_Show"/>
                     <Button Content="Logout" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_Logout"/>
                 </StackPanel>
+                <StackPanel VerticalAlignment="Center" Margin="0,30,0,0" x:Name="EmployeePanel" Visibility="Collapsed">
+                    <Button Content="Monitor" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_MonitorEmployee_show" />
+                    <Button Content="About User" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_AboutEmployee" />
+                    <Button Content="Show DeAn" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_DeAn_show"/>
+                    <Button Content="Show PhongBan" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_PhongBan_show"/>
+                    <Button Content="Show Assignment" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_Assignment_show"/>
+                    <Button Content="Logout" BorderThickness="0" Height="50" FontSize="20" FontWeight="SemiBold" Background="LightGray" Click="Btn_Logout"/>
+                </StackPanel>
             </StackPanel>
 
             <!-- Main Screen -->
             <Grid Grid.Column="1" Name="mainScreen">
                 <StackPanel HorizontalAlignment="Center" Visibility="Visible">
+                    <!-- ===================================================Admin Gui=======================================================================-->
                     <!--Main content-->
                     <Label Name="LabeMainField" HorizontalAlignment="Center" Height="100" FontSize="40" FontWeight="SemiBold" VerticalContentAlignment="Center">LOGIN</Label>
                     <!--About Team-->
@@ -256,6 +265,122 @@
                             <Button Width="100" Content="Revoke" Height="50" FontSize="16" FontWeight="SemiBold" Margin="5,0,0,10" Click="Btn_RevokeRoleUser"/>
                         </StackPanel>
                         <Label Name="errLabelGrantRole" Visibility="Collapsed"/>
+                    </StackPanel>
+                    <!---=======================================End Admin Gui===========================================================-->
+                    
+                    <!--=========================================Employee Gui===========================================================-->
+
+                    <!--List Employee-->
+                    <StackPanel HorizontalAlignment="Center" x:Name="managementEmployee" Grid.Column="1" Visibility="Collapsed">
+                        <DataGrid x:Name="EmployeeManagement" AutoGenerateColumns="False" ScrollViewer.VerticalScrollBarVisibility="Auto" CanUserResizeColumns="True" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="MANV" Binding="{Binding MANV}"/>
+                                <DataGridTextColumn Header="TENNV" Binding="{Binding TENNV}" Width="0.17*" />
+                                <DataGridTextColumn Header="PHAI" Binding="{Binding PHAI}" Width="0.15*"/>
+                                <DataGridTextColumn Header="NGAYSINH" Binding="{Binding NGAYSINH}" Width="0.2*" />
+                                <DataGridTextColumn Header="DIACHI" Binding="{Binding DIACHI}" Width="0.2*"/>
+                                <DataGridTextColumn Header="SODT" Binding="{Binding SODT}" Width="0.15*" />
+                                <DataGridTextColumn Header="LUONG" Binding="{Binding LUONG}" Width="0.15*"  />
+                                <DataGridTextColumn Header="PHUCAP" Binding="{Binding PHUCAP}" Width="0.15*" />
+                                <DataGridTextColumn Header="VAITRO" Binding="{Binding VAITRO}" Width="0.17*"  />
+                                <DataGridTextColumn Header="MANQL" Binding="{Binding MANQL}" Width="0.17*" />
+                                <DataGridTextColumn Header="PHG" Binding="{Binding PHG}" Width="0.15*"  />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Label x:Name="ErrEmployeeManagement" Visibility="Collapsed" Foreground="Red"/>
+                    </StackPanel>
+
+                    <!--About Employee-->
+                    <StackPanel HorizontalAlignment="Center" Margin="0,10,10,10" x:Name="AboutEmployee" Grid.Column="0" Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
+                            <TextBlock Text="MANV" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBox Text="{Binding MANV,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="MANV"  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center" Margin="0,0,10,0" />
+                            <TextBlock Text="TENNV" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBox  Text="{Binding TENNV,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="TENNV" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
+                            <TextBlock Text="PHAI" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBox Text="{Binding PHAI,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="PHAI" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="NGAYSINH" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBox Text="{Binding NGAYSINH,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="NGAYSINH" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
+                            <TextBlock Text="DIACHI" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBox Text="{Binding DIACHI,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="DIACHI" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="SODT" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBox Text="{Binding SODT,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="SODT" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
+                            <TextBlock Text="LUONG" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBox Text="{Binding LUONG,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="LUONG" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="PHUCAP" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBox Text="{Binding PHUCAP,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="PHUCAP" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
+                            <TextBlock Text="VAITRO" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBox Text="{Binding VAITRO,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="VAITRO" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center"  Margin="0,0,10,0"/>
+                            <TextBlock Text="MANQL" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBox Text="{Binding MANQL,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="MANQL" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
+                            <TextBlock Text="PHG" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBox Text="{Binding PHG,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="PHG" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center" Margin="0,0,20,0"/>
+                            <StackPanel Width="380">
+                            </StackPanel>
+                        </StackPanel>
+                        <TextBlock x:Name="UpdateAboutEmployee" Visibility="Collapsed"/>
+                        <Button Width="100" Content="Update" Height="50" FontSize="16" FontWeight="SemiBold" Click="Btn_UpdateEmployee"/>
+                    </StackPanel>
+                    
+                    <!--DEAN-->
+                    <StackPanel HorizontalAlignment="Center" x:Name="ShowDeAn" Visibility="Collapsed">
+                        <DataGrid x:Name="ShowDeAnTable" AutoGenerateColumns="False" ScrollViewer.VerticalScrollBarVisibility="Auto" CanUserResizeColumns="False" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="MADA" Binding="{Binding MADA, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <DataGridTextColumn Header="TENDA" Binding="{Binding TENDA, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.17*" />
+                                <DataGridTextColumn Header="NGAYBD" Binding="{Binding NGAYBD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.15*"/>
+                                <DataGridTextColumn Header="PHONG" Binding="{Binding PHONG, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.2*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Label x:Name="ErrShowDeAn" Visibility="Collapsed" Foreground="Red"/>
+                    </StackPanel>
+
+                    <!--PHONGBAN-->
+                    <StackPanel HorizontalAlignment="Center" x:Name="ShowPhongBan" Visibility="Collapsed">
+                        <DataGrid x:Name="ShowPhongBanTable" AutoGenerateColumns="False" ScrollViewer.VerticalScrollBarVisibility="Auto" CanUserResizeColumns="False" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="MAPB" Binding="{Binding MAPB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <DataGridTextColumn Header="TENPB" Binding="{Binding TENPB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.17*" />
+                                <DataGridTextColumn Header="TRPHG" Binding="{Binding TRPHG, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.15*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Label x:Name="ErrShowPhongBan" Visibility="Collapsed" Foreground="Red"/>
+                    </StackPanel>
+
+                    <!--PhanCong-->
+                    <StackPanel HorizontalAlignment="Center" x:Name="ShowAssignment" Visibility="Collapsed">
+                        <DataGrid x:Name="ShowAssignmentTable" AutoGenerateColumns="False" ScrollViewer.VerticalScrollBarVisibility="Auto" CanUserResizeColumns="False" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="MANV" Binding="{Binding MANV, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <DataGridTextColumn Header="MADA" Binding="{Binding MADA, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.17*" />
+                                <DataGridTextColumn Header="THOIGIAN" Binding="{Binding THOIGIAN, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.15*"/>
+                                <DataGridTemplateColumn Width="100">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="Edit" Click="Btn_EditAssignment" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="100">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="Delete" Click="Btn_DeleteAssignment" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Label x:Name="ErrShowAssignment" Visibility="Collapsed" Foreground="Red"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>

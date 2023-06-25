@@ -18,18 +18,16 @@ using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 
 namespace App
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public class roleInfor
     {
         public string role { get; set; }
         public string role_id { get; set; }
 
-        public roleInfor(string role = "", string role_id ="")
+        public roleInfor(string role = "", string role_id = "")
         {
             this.role = role;
             this.role_id = role_id;
@@ -43,7 +41,7 @@ namespace App
         public string grantable { get; set; }
         public string type { get; set; }
 
-        public Role( string grantee, string privilege, string tableName,string grantable, string type)
+        public Role(string grantee, string privilege, string tableName, string grantable, string type)
         {
             this.grantee = grantee;
             this.privilege = privilege;
@@ -57,14 +55,14 @@ namespace App
         public string Name { get; set; }
         public bool Select { get; set; }
         public bool Insert { get; set; }
-        public bool Update { get; set; } 
-        public bool SelectW { get; set; } 
-        public bool InsertW { get; set; } 
+        public bool Update { get; set; }
+        public bool SelectW { get; set; }
+        public bool InsertW { get; set; }
         public bool UpdateW { get; set; }
         public bool Delete { get; set; }
         public bool DeleteW { get; set; }
 
-        public Table(string name, bool select = false, bool insert = false, bool update = false, bool delete = false, bool Sw = false, bool Iw = false, bool Uw = false, bool dW=false)
+        public Table(string name, bool select = false, bool insert = false, bool update = false, bool delete = false, bool Sw = false, bool Iw = false, bool Uw = false, bool dW = false)
         {
             this.Name = name;
             this.Select = select;
@@ -85,31 +83,30 @@ namespace App
         public string username { get; set; }
         public string role { get; set; }
 
-        public user(int stt,string fullname, string username, string role)
+        public user(int stt, string fullname, string username, string role)
         {
             this.STT = stt;
             this.fullname = fullname;
             this.username = username;
             this.role = role;
         }
-     }
-    public partial class MainWindow : Window,INotifyPropertyChanged
+    }
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private string _Username { get; set; } = string.Empty;
         private string _Password { get; set; } = string.Empty;
-        private ObservableCollection<Table> listtable { get; set; }
-
-
+        private ObservableCollection<Table> listPrivTableAdmin { get; set; }
+        private BindingList<Employee> listEmployeeMonitor { get; set; }
 
         public MainWindow()
         {
-            listtable = new ObservableCollection<Table>();
+            listPrivTableAdmin = new ObservableCollection<Table>();
             Table t = new Table("USER_AM");
-            listtable.Add(t);
-            listtable.Add(new Table("NHANVIEN"));
-            listtable.Add(new Table("DEAN"));
-            listtable.Add(new Table("PHONGBAN"));
-            listtable.Add(new Table("PHANCONG"));
+            listPrivTableAdmin.Add(t);
+            listPrivTableAdmin.Add(new Table("NHANVIEN"));
+            listPrivTableAdmin.Add(new Table("DEAN"));
+            listPrivTableAdmin.Add(new Table("PHONGBAN"));
+            listPrivTableAdmin.Add(new Table("PHANCONG"));
             InitializeComponent();
             this.SizeChanged += MainWindow_SizeChanged;
         }
@@ -118,10 +115,20 @@ namespace App
 
         private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            // for Admin Gui
             dataTable.MaxHeight = mainScreen.ActualHeight - 100;
             dataGrantTable.MaxHeight = mainScreen.ActualHeight - 300;
             dataPriRole.MaxHeight = mainScreen.ActualHeight - 300;
             dataRole.MaxHeight = mainScreen.ActualHeight - 300;
+            // for Employee Gui
+            EmployeeManagement.MaxHeight = mainScreen.ActualHeight - 150;
+            EmployeeManagement.MaxWidth = mainScreen.ActualWidth - 10;
+            ShowDeAnTable.MaxWidth = mainScreen.ActualWidth - 20;
+            ShowDeAnTable.MaxHeight = mainScreen.ActualHeight - 150;
+            ShowPhongBanTable.MaxWidth = mainScreen.ActualWidth - 40;
+            ShowPhongBanTable.MaxHeight = mainScreen.ActualHeight - 150;
+            ShowAssignmentTable.MaxWidth = mainScreen.ActualWidth - 40;
+            ShowAssignmentTable.MaxHeight = mainScreen.ActualHeight - 150;
         }
 
         private void Btn_Login_show(object sender, RoutedEventArgs e)
@@ -151,7 +158,7 @@ namespace App
 
         private void changeGuiLogged(string nameGui)
         {
-            clean();
+            cleanAdminGui();
             TableGui.Visibility = Visibility.Collapsed;
             LoginGui.Visibility = Visibility.Collapsed;
             RegisterGui.Visibility = Visibility.Collapsed;
@@ -161,6 +168,11 @@ namespace App
             GrantRole.Visibility = Visibility.Collapsed;
             SearchPriRoleUser.Visibility = Visibility.Collapsed;
             About.Visibility = Visibility.Collapsed;
+            managementEmployee.Visibility = Visibility.Collapsed;
+            AboutEmployee.Visibility = Visibility.Collapsed;
+            ShowDeAn.Visibility = Visibility.Collapsed;
+            ShowPhongBan.Visibility = Visibility.Collapsed;
+            ShowAssignment.Visibility = Visibility.Collapsed;
             switch (nameGui)
             {
                 case "login":
@@ -200,8 +212,28 @@ namespace App
                     SearchPriRole.Visibility = Visibility.Visible;
                     break;
                 case "About":
-                    LabeMainField.Content = "About Member of Group 5";
+                    LabeMainField.Content = "ABOUT MEMBERS OF GROUP 5";
                     About.Visibility = Visibility.Visible;
+                    break;
+                case "ManagementEmployee":
+                    LabeMainField.Content = "MONITOR EMPLOYEE";
+                    managementEmployee.Visibility = Visibility.Visible;
+                    break;
+                case "AboutEmployee":
+                    LabeMainField.Content = "ABOUT EMPLOYEE";
+                    AboutEmployee.Visibility = Visibility.Visible;
+                    break;
+                case "ShowDeAnTable":
+                    LabeMainField.Content = "PROJECTS";
+                    ShowDeAn.Visibility = Visibility.Visible;
+                    break;
+                case "ShowPhongBanTable":
+                    LabeMainField.Content = "DEPARTMENTS";
+                    ShowPhongBan.Visibility = Visibility.Visible;
+                    break;
+                case "ShowAssignmentTable":
+                    LabeMainField.Content = "Assignments";
+                    ShowAssignment.Visibility = Visibility.Visible;
                     break;
                 default:
                     break;
@@ -248,7 +280,7 @@ namespace App
             dataPriRole.Visibility = Visibility.Collapsed;
             errLabelSearchRole.Content = string.Empty;
             errLabelSearchRole.Visibility = Visibility.Collapsed;
-            
+
         }
 
         private void cleanGrantRoleUser()
@@ -269,7 +301,7 @@ namespace App
             SearchPriRole.Visibility = Visibility.Collapsed;
         }
 
-        private void clean()
+        private void cleanAdminGui()
         {
             cleanDelete();
             cleanLoginGui();
@@ -279,6 +311,8 @@ namespace App
             cleanGrantRoleUser();
             cleanPrivRole();
         }
+
+
 
         private void password_changed(object sender, RoutedEventArgs e)
         {
@@ -294,7 +328,7 @@ namespace App
                 errLabelAdd.Foreground = new SolidColorBrush(Colors.Green);
             }
         }
-        
+
         public void displayTableListUser()
         {
             string hostName = Environment.MachineName;
@@ -413,6 +447,7 @@ namespace App
             }
         }
 
+        // Handle login (Admin and Employee)
         private void Btn_Login(object sender, RoutedEventArgs e)
         {
             string username = usernameBox.Text;
@@ -425,25 +460,65 @@ namespace App
                 errLabel.Foreground = new SolidColorBrush(Colors.Red);
                 return;
             }
+            //check username and password
+            string pattern_username = @"^[a-zA-Z0-9]+$";
+            string pattern_password = @"^[a-zA-Z0-9@#$%^&+=]+$";
+            if (Regex.IsMatch(username, pattern_username) == false || Regex.IsMatch(password, pattern_password) == false)
+            {
+                errLabel.Content = "username and password contains special characters!!";
+                errLabel.Foreground = new SolidColorBrush(Colors.Red);
+                return;
+            }
+            //authentication
             string hostName = Environment.MachineName;
             string conn = $"Data Source={hostName}/XEPDB1;User Id={username};Password={password};";
             OracleConnection connection = new(conn);
             try
             {
                 connection.Open();
-                _Username = username;
-                _Password = password;
-                startPanel.Visibility = Visibility.Collapsed;
-                LoggedPanel.Visibility = Visibility.Visible;
-                changeGuiLogged("listAM");
-                //Display list admin
-                displayTableListUser();
+                // Connect and use Proc Login_User to check type User
+                OracleCommand oracleCommand = new OracleCommand("SYSTEM.LOGIN_USER", connection);
+                oracleCommand.CommandType = CommandType.StoredProcedure;
+                oracleCommand.Parameters.Add("p_username", OracleDbType.Varchar2).Value = username.ToUpper();
+                oracleCommand.Parameters.Add("OUTPUT", OracleDbType.Varchar2, 40).Direction = ParameterDirection.Output;
+                oracleCommand.ExecuteNonQuery();
+                string resultvalue = (string)oracleCommand.Parameters["OUTPUT"].Value.ToString();
+                Console.WriteLine(resultvalue);
+
+                if (resultvalue == "Admin")
+                {
+                    // Gui for Admin
+                    _Username = username;
+                    _Password = password;
+                    startPanel.Visibility = Visibility.Collapsed;
+                    AdminPanel.Visibility = Visibility.Visible;
+                    changeGuiLogged("listAM");
+                    //Display list admin
+                    displayTableListUser();
+                }
+                else if (resultvalue == "Employee")
+                {
+                    // Gui for Employee
+                    _Username = username;
+                    _Password = password;
+                    changeGuiLogged("ManagementEmployee");
+                    MonitorEmployee_Load();
+                    startPanel.Visibility = Visibility.Collapsed;
+                    EmployeePanel.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    // not a user in this App
+                    errLabel.Content = "User isn't exists!";
+                    errLabel.Foreground = new SolidColorBrush(Colors.Red);
+                    errLabel.Visibility = Visibility.Visible;
+                }
+                //CleanGui
                 cleanLoginGui();
             }
             catch (Exception)
             {
-                errLabel.Content = "User isn't exists!";
-                errLabel.Foreground = new SolidColorBrush(Colors.Red);
+
                 return;
             }
             finally
@@ -453,6 +528,7 @@ namespace App
             }
         }
 
+        // Log out both Admin and Employee
         private void Btn_Logout(object sender, RoutedEventArgs e)
         {
             _Username = string.Empty;
@@ -461,9 +537,11 @@ namespace App
             SearchPriRole.Visibility = Visibility.Collapsed;
             //sidebar
             startPanel.Visibility = Visibility.Visible;
-            LoggedPanel.Visibility = Visibility.Collapsed;
+            AdminPanel.Visibility = Visibility.Collapsed;
+            EmployeePanel.Visibility = Visibility.Collapsed;
         }
 
+        // Add user Admin
         private void Btn_Add(object sender, RoutedEventArgs e)
         {
             string username = usernameBoxRegister.Text;
@@ -519,6 +597,7 @@ namespace App
             }
         }
 
+        // Show Grant and revoke Gui
         private void Btn_GrantRevoke_Show(object sender, RoutedEventArgs e)
         {
             changeGuiLogged("GrantPriv");
@@ -526,32 +605,37 @@ namespace App
             dataGrantTable.Visibility = Visibility.Visible;
         }
 
+        // Handle event Revoke
         private void Btn_Revoke(object sender, RoutedEventArgs e)
         {
             GrantRevokePrivTable(false);
         }
 
+        // Handle event Grant
         private void Btn_Grant(object sender, RoutedEventArgs e)
         {
             GrantRevokePrivTable(true);
         }
 
+        // Show Create and delete role Gui
         private void Btn_CreateDeleteRole_Show(object sender, RoutedEventArgs e)
         {
             changeGuiLogged("CreateDeleteRole");
         }
 
-        
+        // Show Grant role to user Gui
         private void Btn_GrantRoleUser_Show(object sender, RoutedEventArgs e)
         {
             changeGuiLogged("GrantRoleUser");
-        } 
+        }
 
+        // Show Search Gui
         private void Btn_SearchRole_Show(object sender, RoutedEventArgs e)
         {
             changeGuiLogged("SearchRolePrivUser");
         }
 
+        // Handle event Delete role
         private void Btn_DeleteRole(object sender, RoutedEventArgs e)
         {
             string roleName = nameRoleCreateDelete.Text;
@@ -560,7 +644,7 @@ namespace App
             OracleConnection con = new OracleConnection(conn);
             try
             {
-                con.Open(); 
+                con.Open();
                 OracleCommand oracleCommand = new OracleCommand("SYSTEM.DELETE_ROLE", con);
                 oracleCommand.CommandType = CommandType.StoredProcedure;
                 oracleCommand.Parameters.Add("ROLE_NAME", OracleDbType.Varchar2).Value = roleName;
@@ -582,10 +666,13 @@ namespace App
             }
         }
 
+        // Show Priv Role Gui
         private void Btn_PrivRole_Show(object sender, RoutedEventArgs e)
         {
             changeGuiLogged("PrivRole");
         }
+
+        //Handle Event Create Role
         private void Btn_CreateRole(object sender, RoutedEventArgs e)
         {
             string roleName = nameRoleCreateDelete.Text;
@@ -600,7 +687,7 @@ namespace App
                 oracleCommand.Parameters.Add("ROLE_NAME", OracleDbType.Varchar2).Value = roleName;
                 oracleCommand.Parameters.Add("RESULT", OracleDbType.Varchar2, 200).Direction = ParameterDirection.Output;
                 oracleCommand.ExecuteNonQuery();
-                string resultvalue = (string) oracleCommand.Parameters["RESULT"].Value.ToString();
+                string resultvalue = (string)oracleCommand.Parameters["RESULT"].Value.ToString();
                 con.Close();
                 con.Dispose();
                 errLabelRole.Content = resultvalue;
@@ -617,8 +704,8 @@ namespace App
                 return;
             }
         }
-        
 
+        // Handle Search Role event
         private void Btn_SearchRole(object sender, RoutedEventArgs e)
         {
             dataPriRole.Visibility = Visibility.Collapsed;
@@ -663,6 +750,7 @@ namespace App
             }
         }
 
+        // Handle Search Role of User Event
         private void Btn_SearchRoleUser(object sender, RoutedEventArgs e)
         {
             dataPrivRole.Visibility = Visibility.Collapsed;
@@ -704,9 +792,11 @@ namespace App
                 return;
             }
         }
+
+        // Handle Search Priv Event
         private void Btn_SearchPrivilege(object sender, RoutedEventArgs e)
         {
-            dataRole.Visibility= Visibility.Collapsed;
+            dataRole.Visibility = Visibility.Collapsed;
             string name = nameRoleSearch.Text;
             string hostName = Environment.MachineName;
             string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
@@ -724,7 +814,7 @@ namespace App
                     string privilege = reader.GetString(4);
                     string grantable = reader.GetString(5);
                     string type = reader.GetString(8);
-                    Role r = new Role(grantee,privilege,tableName,grantable,type);
+                    Role r = new Role(grantee, privilege, tableName, grantable, type);
                     roleList.Add(r);
                 }
                 if (roleList.Count() != 0)
@@ -733,7 +823,8 @@ namespace App
                     dataPriRole.ItemsSource = roleList;
                     errLabelSearchRole.Visibility = Visibility.Collapsed;
                 }
-                else { 
+                else
+                {
                     errLabelSearchRole.Content = "Role doesn't have any privileges";
                     errLabelSearchRole.Foreground = new SolidColorBrush(Colors.Red);
                     errLabelSearchRole.Visibility = Visibility.Visible;
@@ -747,6 +838,7 @@ namespace App
             }
         }
 
+        // Handle revoke role to user Event
         private void Btn_RevokeRoleUser(object sender, RoutedEventArgs e)
         {
             string roleName = nameRoleGrant.Text;
@@ -778,6 +870,8 @@ namespace App
                 return;
             }
         }
+
+        // Handle Grant Role to user event
         private void Btn_GrantRoleUser(object sender, RoutedEventArgs e)
         {
             string roleName = nameRoleGrant.Text;
@@ -811,7 +905,8 @@ namespace App
 
         }
 
-        private string GrantPrivilege(bool t,string priv, string nameObject, string nameTable, int flag)
+        // Handle Grant Priv
+        private string GrantPrivilege(bool t, string priv, string nameObject, string nameTable, int flag)
         {
             string hostName = Environment.MachineName;
             string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
@@ -841,11 +936,12 @@ namespace App
             }
         }
 
+        // Handle Revoke Priv in table
         private void GrantRevokePrivTable(bool flag)
         {
             string nameObject = nameUserRole.Text;
             BindingList<string> listError = new BindingList<string>();
-            foreach (Table table in dataGrantTable.Items) 
+            foreach (Table table in dataGrantTable.Items)
             {
                 string name = table.Name;
                 bool select = table.Select;
@@ -905,16 +1001,328 @@ namespace App
                     if (err != "")
                         listError.Add(err);
                 }
-                MessageBox.Show(name + " " + select+" "+insert+" "+update+" "+delete);
+                MessageBox.Show(name + " " + select + " " + insert + " " + update + " " + delete);
                 dataRoleErr.ItemsSource = listError;
                 dataRoleErr.Visibility = Visibility.Visible;
             }
         }
 
+        // Show role Table
         private void displayTableRole()
         {
-            dataGrantTable.ItemsSource = listtable;
+            dataGrantTable.ItemsSource = listPrivTableAdmin;
             dataRoleErr.Visibility = Visibility.Collapsed;
+        }
+
+
+
+        private void Btn_MonitorEmployee_show(object sender, RoutedEventArgs e)
+        {
+            changeGuiLogged("ManagementEmployee");
+        }
+
+        private void MonitorEmployee_Load()
+        {
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            OracleConnection con = new OracleConnection(conn);
+            string p_MANV = _Username.Substring(2);
+            try
+            {
+                con.Open();
+                OracleCommand oracleCommand = new OracleCommand($"select * from system.nhanvien where MANV!={p_MANV}", con);
+                OracleDataReader reader = oracleCommand.ExecuteReader();
+                listEmployeeMonitor = new BindingList<Employee>();
+                while (reader.Read())
+                {
+                    string manv = reader.GetString(0);
+                    string tennv = reader.GetString(1);
+                    string phai = reader.GetString(2);
+                    string ngaysinh = reader.GetDateTime(3).ToString("dd-MM-yyyy");
+                    string diachi = reader.GetString(4);
+                    string sodt = reader.GetString(5);
+                    string luong = reader.IsDBNull(6) ? "NULL" : reader.GetInt32(6).ToString();
+                    string phucap = reader.IsDBNull(7) ? "NULL" : reader.GetInt32(7).ToString();
+                    string vaitro = reader.GetString(8);
+                    string manql = reader.IsDBNull(9) ? "NULL" : reader.GetString(9);
+                    string phg = reader.IsDBNull(10) ? "NULL" : reader.GetString(10);
+                    Employee employee = new Employee(manv, tennv, phai, ngaysinh, diachi, sodt, luong, phucap, vaitro, manql, phg);
+                    listEmployeeMonitor.Add(employee);
+                }
+                if (listEmployeeMonitor.Count > 0)
+                {
+                    ErrEmployeeManagement.Content = "";
+                    ErrEmployeeManagement.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    ErrEmployeeManagement.Content = "You don't manager any employee!!";
+                    ErrEmployeeManagement.Visibility = Visibility.Visible;
+                }
+                EmployeeManagement.ItemsSource = listEmployeeMonitor;
+            }
+            catch (Exception)
+            {
+                ErrEmployeeManagement.Content = "App have a problem";
+                ErrEmployeeManagement.Visibility = Visibility.Visible;
+                return;
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        private void Btn_AboutEmployee(object sender, RoutedEventArgs e)
+        {
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            OracleConnection con = new OracleConnection(conn);
+            string p_MANV = _Username.Substring(2);
+            try
+            {
+                con.Open();
+                OracleCommand oracleCommand = new OracleCommand($"select * from system.nhanvien where MANV={p_MANV}", con);
+                OracleDataReader reader = oracleCommand.ExecuteReader();
+                BindingList<Employee> listT = new BindingList<Employee>();
+                if (reader.Read())
+                {
+                    string manv = reader.GetString(0);
+                    string tennv = reader.GetString(1);
+                    string phai = reader.GetString(2);
+                    string ngaysinh = reader.GetDateTime(3).ToString("dd/MM/yyyy");
+                    string diachi = reader.GetString(4);
+                    string sodt = reader.GetString(5);
+                    string luong = reader.IsDBNull(6) ? "NULL" : reader.GetInt32(6).ToString();
+                    string phucap = reader.IsDBNull(7) ? "NULL" : reader.GetInt32(7).ToString();
+                    string vaitro = reader.GetString(8);
+                    string manql = reader.IsDBNull(9) ? "NULL" : reader.GetString(9);
+                    string phg = reader.IsDBNull(10) ? "NULL" : reader.GetString(10);
+                    Employee employee = new Employee(manv, tennv, phai, ngaysinh, diachi, sodt, luong, phucap, vaitro, manql, phg);
+                    AboutEmployee.DataContext = employee;
+                    changeGuiLogged("AboutEmployee");
+                }
+            }
+            catch (Exception)
+            {
+                ErrEmployeeManagement.Content = "App have a problem";
+                ErrEmployeeManagement.Visibility = Visibility.Visible;
+                return;
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+        private void Btn_UpdateEmployee(object sender, RoutedEventArgs e)
+        {
+            string ngaysinh = NGAYSINH.Text;
+            string diachi = DIACHI.Text;
+            string sodt = SODT.Text;
+
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            OracleConnection con = new OracleConnection(conn);
+            try
+            {
+                con.Open();
+                OracleCommand command = con.CreateCommand();
+
+                command.CommandText = $"UPDATE system.NHANVIEN SET NGAYSINH = TO_DATE(:NGAYSINH, 'DD/MM/YYYY'), DIACHI = :DIACHI, SODT = :SODT";
+
+                command.Parameters.Add("NGAYSINH", OracleDbType.Varchar2).Value = ngaysinh;
+                command.Parameters.Add("DIACHI", OracleDbType.Varchar2).Value = diachi;
+                command.Parameters.Add("SODT", OracleDbType.Varchar2).Value = sodt;
+
+                int rowsUpdated = command.ExecuteNonQuery();
+
+                if (rowsUpdated > 0)
+                {
+                    Btn_AboutEmployee(sender, e);
+                    UpdateAboutEmployee.Text = "Success!!! App only change NGAYSINH, DIACHI, SODT!!!";
+                    UpdateAboutEmployee.Visibility = Visibility.Visible;
+                    UpdateAboutEmployee.Foreground = new SolidColorBrush(Colors.Green);
+                }
+                else
+                {
+                    UpdateAboutEmployee.Text = "Failure!!!";
+                    UpdateAboutEmployee.Visibility = Visibility.Visible;
+                    UpdateAboutEmployee.Foreground = new SolidColorBrush(Colors.Red);
+                }
+            }
+            catch (Exception ex)
+            {
+                UpdateAboutEmployee.Text = "Failure!!!";
+                UpdateAboutEmployee.Visibility = Visibility.Visible;
+                UpdateAboutEmployee.Foreground = new SolidColorBrush(Colors.Red);
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        private void Btn_DeAn_show(object sender, RoutedEventArgs e)
+        {
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            OracleConnection con = new OracleConnection(conn);
+            try
+            {
+                con.Open();
+                OracleCommand oracleCommand = new OracleCommand($"select * from system.DEAN", con);
+                OracleDataReader reader = oracleCommand.ExecuteReader();
+                BindingList<Project> projects = new BindingList<Project>();
+                while (reader.Read())
+                {
+                    string MADA = reader.GetString(0);
+                    string TENDA = reader.GetString(1);
+                    string NGAYBD = reader.GetDateTime(2).ToString("dd/MM/yyyy");
+                    string PHONG = reader.GetString(3);
+                    Project project = new Project(MADA, TENDA, NGAYBD, PHONG);
+                    projects.Add(project);
+                }
+                if (projects.Count > 0)
+                {
+                    ErrShowDeAn.Content = "";
+                    ErrShowDeAn.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    ErrShowDeAn.Content = "You don't see any Projects!!";
+                    ErrShowDeAn.Visibility = Visibility.Visible;
+                }
+                ShowDeAnTable.ItemsSource = projects;
+                changeGuiLogged("ShowDeAnTable");
+            }
+            catch (Exception)
+            {
+                ErrShowDeAn.Content = "App have a problem";
+                ErrShowDeAn.Visibility = Visibility.Visible;
+                return;
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        private void Btn_PhongBan_show(object sender, RoutedEventArgs e)
+        {
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            OracleConnection con = new OracleConnection(conn);
+            try
+            {
+                con.Open();
+                OracleCommand oracleCommand = new OracleCommand($"select * from system.PhongBan", con);
+                OracleDataReader reader = oracleCommand.ExecuteReader();
+                BindingList<Department> Departments = new BindingList<Department>();
+                while (reader.Read())
+                {
+                    string MAPB = reader.GetString(0);
+                    string TENPB = reader.GetString(1);
+                    string TRPHG = reader.IsDBNull(2) ? "NULL": reader.GetString(2);
+                    Department  department = new Department(MAPB,TENPB,TRPHG);
+                    Departments.Add(department);
+                }
+                if (Departments.Count > 0)
+                {
+                    ErrShowPhongBan.Content = "";
+                    ErrShowPhongBan.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    ErrShowPhongBan.Content = "You don't see any Department!!";
+                    ErrShowPhongBan.Visibility = Visibility.Visible;
+                }
+                ShowPhongBanTable.ItemsSource = Departments;
+                changeGuiLogged("ShowPhongBanTable");
+            }
+            catch (Exception)
+            {
+                ErrShowDeAn.Content = "App have a problem";
+                ErrShowDeAn.Visibility = Visibility.Visible;
+                return;
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        private void Btn_Assignment_show(object sender, RoutedEventArgs e)
+        {
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            OracleConnection con = new OracleConnection(conn);
+            try
+            {
+                con.Open();
+                OracleCommand oracleCommand = new OracleCommand($"select * from system.PhanCong", con);
+                OracleDataReader reader = oracleCommand.ExecuteReader();
+                BindingList<Assignment> assignments = new BindingList<Assignment>();
+                while (reader.Read())
+                {
+                    string MANV = reader.GetString(0);
+                    string MADA = reader.GetString(1);
+                    string THOIGIAN = reader.GetDateTime(2).ToString("dd/MM/yyyy");
+                    Assignment assignment = new Assignment(MANV, MADA, THOIGIAN);
+                    assignments.Add(assignment);
+                }
+                if (assignments.Count > 0)
+                {
+                    ErrShowPhongBan.Content = "";
+                    ErrShowPhongBan.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    ErrShowPhongBan.Content = "You don't see any Department!!";
+                    ErrShowPhongBan.Visibility = Visibility.Visible;
+                }
+                ShowAssignmentTable.ItemsSource = assignments;
+                changeGuiLogged("ShowAssignmentTable");
+            }
+            catch (Exception)
+            {
+                ErrShowDeAn.Content = "App have a problem";
+                ErrShowDeAn.Visibility = Visibility.Visible;
+                return;
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        private void Btn_DeleteAssignment(object sender, RoutedEventArgs e)
+        {
+            Assignment temp = (Assignment) ShowAssignmentTable.SelectedItem;
+            //MessageBox.Show(temp.MANV+" "+temp.MADA);
+
+        }
+
+        private void Btn_EditAssignment(object sender, RoutedEventArgs e)
+        {
+            Assignment temp = (Assignment)ShowAssignmentTable.SelectedItem;
+            // show optionpanel to input data
+            if (temp != null)
+            {
+                var optionPanel = new OptionAssignment(temp,_Username,_Password);
+                optionPanel.Show();
+                optionPanel.OneMessage += (string mess, Assignment asign) =>
+                {
+                    if (mess != null)
+                        Btn_Assignment_show(sender, e);
+                };
+            }
         }
     }
 }
