@@ -20,3 +20,8 @@
 - Open the project in Visual Studio 2022.
 - Then, run the project.
 - (note: visual studio 2022 generates a error App.g.cs file, so you need to delete word "App" in "App.App" of the file App.g.cs to run the project, unless you will get an error.)
+
+## How to run exe file:
+
+- The file **`App.exe`** in the folder **`Database-Administrator\App\App\bin`**.
+- Double click on the **`App.exe`** file to run the program.
