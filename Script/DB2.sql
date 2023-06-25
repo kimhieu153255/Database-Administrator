@@ -13,7 +13,7 @@ GRANT EXECUTE ON DBMS_CRYPTO TO system;
 grant all privileges to system;
 /
 
-
+connect system/153255@localhost:1521/XEPDB1
 /
 
 DROP TABLE USER_AM ;
