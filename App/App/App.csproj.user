@@ -7,15 +7,33 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="OptionAssignment.xaml.cs">
+    <Compile Update="AddAssignment.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="AddProject.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="editAssignment.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="EditProject.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="AddAssignment.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="AddProject.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="EditProject.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="OptionAssignment.xaml">
+    <Page Update="EditAssignment.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

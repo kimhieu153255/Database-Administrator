@@ -97,6 +97,7 @@ namespace App
         private string _Password { get; set; } = string.Empty;
         private ObservableCollection<Table> listPrivTableAdmin { get; set; }
         private BindingList<Employee> listEmployeeMonitor { get; set; }
+        private static string role_user { get; set; }
 
         public MainWindow()
         {
@@ -480,10 +481,12 @@ namespace App
                 OracleCommand oracleCommand = new OracleCommand("SYSTEM.LOGIN_USER", connection);
                 oracleCommand.CommandType = CommandType.StoredProcedure;
                 oracleCommand.Parameters.Add("p_username", OracleDbType.Varchar2).Value = username.ToUpper();
-                oracleCommand.Parameters.Add("OUTPUT", OracleDbType.Varchar2, 40).Direction = ParameterDirection.Output;
+                oracleCommand.Parameters.Add("OUTPUT1", OracleDbType.Varchar2, 40).Direction = ParameterDirection.Output;
+                oracleCommand.Parameters.Add("OUTPUT2", OracleDbType.Varchar2, 20).Direction = ParameterDirection.Output;
                 oracleCommand.ExecuteNonQuery();
-                string resultvalue = (string)oracleCommand.Parameters["OUTPUT"].Value.ToString();
-                Console.WriteLine(resultvalue);
+                string resultvalue = (string)oracleCommand.Parameters["OUTPUT1"].Value.ToString();
+                string role = oracleCommand.Parameters["OUTPUT2"].IsNullable?"null": (string)oracleCommand.Parameters["OUTPUT2"].Value.ToString();
+                MessageBox.Show(resultvalue+" "+role);
 
                 if (resultvalue == "Admin")
                 {
@@ -501,6 +504,7 @@ namespace App
                     // Gui for Employee
                     _Username = username;
                     _Password = password;
+                    role_user = role;
                     changeGuiLogged("ManagementEmployee");
                     MonitorEmployee_Load();
                     startPanel.Visibility = Visibility.Collapsed;
@@ -518,7 +522,9 @@ namespace App
             }
             catch (Exception)
             {
-
+                errLabel.Content = "User isn't exists!";
+                errLabel.Foreground = new SolidColorBrush(Colors.Red);
+                errLabel.Visibility = Visibility.Visible;
                 return;
             }
             finally
@@ -1305,24 +1311,134 @@ namespace App
         private void Btn_DeleteAssignment(object sender, RoutedEventArgs e)
         {
             Assignment temp = (Assignment) ShowAssignmentTable.SelectedItem;
-            //MessageBox.Show(temp.MANV+" "+temp.MADA);
+            if(temp != null)
+            {
+                MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this assignment?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    string hostName = Environment.MachineName;
+                    string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+                    OracleConnection con = new OracleConnection(conn);
+                    try
+                    {
+                        con.Open();
+                        OracleCommand oracleCommand = new OracleCommand($"Delete from system.phancong where manv=:MANV and mada=:MADA", con);
+                        oracleCommand.Parameters.Add("MANV", OracleDbType.Varchar2).Value = temp.MANV;
+                        oracleCommand.Parameters.Add("MADA", OracleDbType.Varchar2).Value = temp.MADA;
 
+                        int rowsDelete = oracleCommand.ExecuteNonQuery();
+                        if (rowsDelete > 0)
+                            Btn_Assignment_show(sender, e);
+                        changeGuiLogged("ShowAssignmentTable");
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("App have a problem");
+                        return;
+                    }
+                    finally
+                    {
+                        con.Close();
+                        con.Dispose();
+                    }
+                }
+            }    
+            
         }
 
         private void Btn_EditAssignment(object sender, RoutedEventArgs e)
         {
-            Assignment temp = (Assignment)ShowAssignmentTable.SelectedItem;
-            // show optionpanel to input data
-            if (temp != null)
+            Assignment selected = (Assignment)ShowAssignmentTable.SelectedItem;
+            if (selected != null)
             {
-                var optionPanel = new OptionAssignment(temp,_Username,_Password);
+                Assignment temp = new Assignment(selected.MANV, selected.MADA, selected.THOIGIAN);
+                var optionPanel = new EditAssignment(temp, _Username,_Password);
                 optionPanel.Show();
                 optionPanel.OneMessage += (string mess, Assignment asign) =>
                 {
-                    if (mess != null)
+                    MessageBox.Show(mess);
+                    if (mess == "Success!!!")
                         Btn_Assignment_show(sender, e);
                 };
             }
+        }
+
+        private void InsertAssignment_Click(object sender, RoutedEventArgs e)
+        {
+            var addAssignment = new AddAssignment(_Username, _Password);
+            addAssignment.Show();
+            addAssignment.OneMessage += (string mess) =>
+            {
+                MessageBox.Show(mess);
+                if (mess == "Success!!!")
+                    Btn_Assignment_show(sender, e);
+            };
+        }
+
+        private void Btn_EditProject(object sender, RoutedEventArgs e)
+        {
+            Project selected = (Project)ShowDeAnTable.SelectedItem;
+            if (selected != null)
+            {
+                Project temp = new Project(selected.MADA,selected.TENDA,selected.NGAYBD,selected.PHONG);
+                var optionPanel = new EditProject(temp, _Username, _Password);
+                optionPanel.Show();
+                optionPanel.OneMessage += (string mess, Project pro) =>
+                {
+                    MessageBox.Show(mess);
+                    if (mess == "Success!!!")
+                        Btn_DeAn_show(sender, e);
+                };
+            }
+        }
+
+        private void Btn_DeleteProject(object sender, RoutedEventArgs e)
+        {
+            Project project =(Project) ShowDeAnTable.SelectedItem;
+            if (project != null)
+            {
+                MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this Project?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    string hostName = Environment.MachineName;
+                    string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+                    OracleConnection con = new OracleConnection(conn);
+                    try
+                    {
+                        con.Open();
+                        OracleCommand oracleCommand = new OracleCommand($"Delete from system.dean where mada=:MADA", con);
+                        oracleCommand.Parameters.Add("MADA", OracleDbType.Varchar2).Value = project.MADA;
+
+                        int rowsDelete = oracleCommand.ExecuteNonQuery();
+                        if (rowsDelete > 0)
+                            Btn_DeAn_show(sender, e);
+
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("App have a problem");
+                        return;
+                    }
+                    finally
+                    {
+                        con.Close();
+                        con.Dispose();
+                    }
+                }
+            }
+        }
+
+        private void InsertProject_Click(object sender, RoutedEventArgs e)
+        {
+            //0038
+            var addProject = new AddProject(_Username, _Password);
+            addProject.Show();
+            addProject.OneMessage += (string mess) =>
+            {
+                MessageBox.Show(mess);
+                if (mess == "Success!!!")
+                    Btn_DeAn_show(sender, e);
+            };
         }
     }
 }

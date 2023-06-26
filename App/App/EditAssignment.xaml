@@ -1,0 +1,27 @@
+﻿<Window x:Class="App.EditAssignment"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:App"
+        mc:Ignorable="d"
+        Title="Update Assignment" Height="300" MinWidth="500" Width="600">
+    <StackPanel HorizontalAlignment="Center" Margin="20,0,20,20" x:Name="EditPanel" Visibility="Visible">
+        <Label Name="LabelEdit" HorizontalAlignment="Center" Height="70" FontSize="30" FontWeight="SemiBold" VerticalContentAlignment="Center">Update Assignment</Label>
+        <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
+            <TextBlock Text="MANV" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+            <TextBox Text="{Binding MANV}" x:Name="MANV" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center"  Margin="0,0,10,0"/>
+            <TextBlock Text="MADA" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+            <TextBox Text="{Binding MADA}" x:Name="MADA" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,10,0,5">
+            <TextBlock Text="THOIGIAN" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+            <TextBox Text="{Binding THOIGIAN}" x:Name="THOIGIAN" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center" Margin="0,0,20,0"/>
+            <TextBlock Text="Ex: 25/05/2023" VerticalAlignment="Center" Width="255" FontSize="16" FontWeight="SemiBold" TextAlignment="Left"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,10,0,5" >
+            <Button Width="100" Content="Update" Height="45" FontSize="16" FontWeight="SemiBold" Click="Update_Click" Margin="0,0,5,0"/>
+            <Button Width="100" Content="Cancle" Height="45" FontSize="16" FontWeight="SemiBold" Click="Cancle_Click" Margin="5,0,0,0"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

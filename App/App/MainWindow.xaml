@@ -340,9 +340,24 @@
                                 <DataGridTextColumn Header="TENDA" Binding="{Binding TENDA, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.17*" />
                                 <DataGridTextColumn Header="NGAYBD" Binding="{Binding NGAYBD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.15*"/>
                                 <DataGridTextColumn Header="PHONG" Binding="{Binding PHONG, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.2*" />
+                                <DataGridTemplateColumn Width="100">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="Edit" Click="Btn_EditProject" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="100">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="Delete" Click="Btn_DeleteProject" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                         <Label x:Name="ErrShowDeAn" Visibility="Collapsed" Foreground="Red"/>
+                        <Button Width="100" Content="Insert" Height="45" FontSize="16" FontWeight="SemiBold" Click="InsertProject_Click" Margin="5,0,0,0"/>
                     </StackPanel>
 
                     <!--PHONGBAN-->
@@ -352,6 +367,7 @@
                                 <DataGridTextColumn Header="MAPB" Binding="{Binding MAPB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <DataGridTextColumn Header="TENPB" Binding="{Binding TENPB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.17*" />
                                 <DataGridTextColumn Header="TRPHG" Binding="{Binding TRPHG, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.15*"/>
+                                
                             </DataGrid.Columns>
                         </DataGrid>
                         <Label x:Name="ErrShowPhongBan" Visibility="Collapsed" Foreground="Red"/>
@@ -381,6 +397,7 @@
                             </DataGrid.Columns>
                         </DataGrid>
                         <Label x:Name="ErrShowAssignment" Visibility="Collapsed" Foreground="Red"/>
+                        <Button Width="100" Content="Insert" Height="45" FontSize="16" FontWeight="SemiBold" Click="InsertAssignment_Click" Margin="5,0,0,0"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>

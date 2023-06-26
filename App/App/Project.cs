@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App
 {
-    internal class Project
+    public class Project
     {
         public string MADA { get; set; }
         public string TENDA { get; set; }

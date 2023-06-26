@@ -25,5 +25,11 @@ C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\
 C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\ref\App.dll
 C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\App.pdb
 C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\App.genruntimeconfig.cache
-C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\OptionAssignment.g.cs
-C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\OptionAssignment.baml
+C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\AddAssignment.g.cs
+C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\AddAssignment.baml
+C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\AddProject.g.cs
+C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\AddProject.baml
+C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\EditAssignment.g.cs
+C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\EditProject.g.cs
+C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\EditAssignment.baml
+C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\EditProject.baml

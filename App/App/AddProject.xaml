@@ -1,0 +1,29 @@
+﻿<Window x:Class="App.AddProject"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:App"
+        mc:Ignorable="d"
+        Title="AddProject"  Height="300" MinWidth="500" Width="600">
+    <StackPanel HorizontalAlignment="Center" Margin="20,0,20,20" x:Name="InsertPanel" Visibility="Visible">
+        <Label Name="LabelInsert" HorizontalAlignment="Center" Height="70" FontSize="30" FontWeight="SemiBold" VerticalContentAlignment="Center">Insert Project</Label>
+        <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
+            <TextBlock Text="MADA" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+            <TextBox x:Name="MADAinsert" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center"  Margin="0,0,10,0"/>
+            <TextBlock Text="TENDA" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+            <TextBox x:Name="TENDAinsert" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,10,0,5">
+            <TextBlock Text="NGAYBD" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+            <TextBox x:Name="NGAYBDinsert" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+            <TextBlock Text="PHONG" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+            <ComboBox x:Name="PHONGinsert" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center"/>
+        </StackPanel>
+            <TextBlock Text="Ex: 25/05/2023" VerticalAlignment="Center" FontSize="16" FontWeight="SemiBold" TextAlignment="Left" Padding="100,0,0,0"/>
+        <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,10,0,5" >
+            <Button Width="100" Content="Insert" Height="45" FontSize="16" FontWeight="SemiBold" Click="Insert_Click" Margin="0,0,5,0"/>
+            <Button Width="100" Content="Cancle" Height="45" FontSize="16" FontWeight="SemiBold" Click="Cancle_Click" Margin="5,0,0,0"/>
+        </StackPanel>
+    </StackPanel>
+</Window>
