@@ -29,6 +29,8 @@ namespace App
         public string _Username { get; set; }
         public string _Password { get; set; }
         public Employee Emp { get; set; }
+        private static OracleConnection con { get; set; } = null;
+
         public EditEmployee(string role_user, string _Username, string _Password, Employee employee)
         {
             this.role_user = role_user;
@@ -40,6 +42,12 @@ namespace App
             loadPhong();
             loadGender();
             changeGui(role_user);
+        }
+        private void CreateConnection()
+        {
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={this._Username};Password={this._Password};";
+            con = new OracleConnection(conn);
         }
         private void loadGender()
         {
@@ -60,6 +68,13 @@ namespace App
                 SODT.IsReadOnly = true;
                 MANQL.IsReadOnly = true;
                 PHG.IsEnabled = false;
+
+                TENNV.Background = new SolidColorBrush(Colors.LightGray);
+                NGAYSINH.Background = new SolidColorBrush(Colors.LightGray);    
+                DIACHI.Background = new SolidColorBrush(Colors.LightGray);
+                SODT.Background = new SolidColorBrush(Colors.LightGray);
+                MANQL.Background = new SolidColorBrush(Colors.LightGray);
+
                 this.Height = this.ActualHeight + 500;
             }
         }
@@ -76,12 +91,10 @@ namespace App
             string manql = MANQL.Text;
             string phg = (string)PHG.SelectedValue;
 
-            MessageBox.Show(manv + " " + tennv + " " + phai + " " + ngaysinh + " " + diachi + " " + sodt + " " + luong + " " + phucap + " " + manql + " " + phg);
-
             // check empty
             if (tennv == "" || ngaysinh == "" || sodt == "" || diachi == "")
             {
-                MessageBox.Show("Please fill TENV, NGAYSINH, DIACHI and VAITRO!!!");
+                MessageBox.Show("Please fill TENV, NGAYSINH, SODT and DIACHI!!!");
                 return;
             }
 
@@ -113,9 +126,9 @@ namespace App
                     return;
                 }
             }
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
+            //string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            //OracleConnection con = new OracleConnection(conn);
             try
             {
                 con.Open();
@@ -141,7 +154,6 @@ namespace App
                     command.Parameters.Add("MANV", OracleDbType.Varchar2).Value = manv;
                 }
                 int rowsUpdated = command.ExecuteNonQuery();
-                MessageBox.Show("update: " + rowsUpdated);
                 if (rowsUpdated > 0)
                     OneMessage?.Invoke(new string("Success!!!"));
             }
@@ -165,9 +177,9 @@ namespace App
         //Load MAPB to combobox
         private void loadPhong()
         {
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
+            //string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            //OracleConnection con = new OracleConnection(conn);
             try
             {
                 con.Open();
@@ -186,9 +198,9 @@ namespace App
                     PHG.SelectedItem = list[index];
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("App have a problem!!!");
                 return;
             }
             finally

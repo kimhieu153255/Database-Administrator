@@ -23,6 +23,12 @@ namespace App
     /// </summary>
     public partial class AddEmployee : Window
     {
+        public delegate void sendMessage(string message);
+        public event sendMessage OneMessage;
+        public string _Username { get; set; }
+        public string _Password { get; set; }
+        private static OracleConnection con { get; set; } = null;
+
         public AddEmployee(string _Username,string _Password)
         {
             this._Username = _Username;
@@ -32,11 +38,12 @@ namespace App
             loadMANV();
         }
 
-        public delegate void sendMessage(string message);
-        public event sendMessage OneMessage;
-        public string _Username { get; set; }
-        public string _Password { get; set; }
-
+        private void CreateConnection()
+        {
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={this._Username};Password={this._Password};";
+            con = new OracleConnection(conn);
+        }
 
         private void Insert_Click(object sender, RoutedEventArgs e)
         {
@@ -71,10 +78,7 @@ namespace App
                 return;
             }    
 
-            MessageBox.Show(manv + " " + tennv + " " + phai + " " + ngaysinh + " " + diachi + " " + sodt + " " + manql + " " + phg);
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
             try
             {
                 con.Open();
@@ -90,13 +94,12 @@ namespace App
                 command.Parameters.Add("PHG", OracleDbType.Varchar2).Value = (phg.Equals("") ? DBNull.Value : phg);
 
                 int rowsInsert = command.ExecuteNonQuery();
-                MessageBox.Show("insert: " + rowsInsert);
                 if (rowsInsert > 0)
                     OneMessage?.Invoke(new string("Success!!!"));
             }
-            catch (Exception es)
+            catch (Exception)
             {
-                MessageBox.Show(es.Message);
+                MessageBox.Show("App have a problem!!!");
                 return;
             }
             finally
@@ -110,9 +113,7 @@ namespace App
         // generate MANV next
         private void loadMANV()
         {
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
             try
             {
                 con.Open();
@@ -124,13 +125,12 @@ namespace App
                     int temp = int.Parse(manv);
                     temp++;
                     string newMANV = temp.ToString("0000");
-                    MessageBox.Show(newMANV);
                     MANV.Text = newMANV;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("App have a problem!!!"); 
                 return;
             }
             finally
@@ -143,9 +143,7 @@ namespace App
         //Load MAPB to combobox
         private void loadPhong()
         {
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
             try
             {
                 con.Open();
@@ -163,7 +161,7 @@ namespace App
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("App have a problem!!!");
                 return;
             }
             finally

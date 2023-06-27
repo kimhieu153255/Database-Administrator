@@ -1,6 +1,7 @@
 ﻿using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,12 +25,22 @@ namespace App
         public event sendMessage OneMessage;
         public string _Username { get; set; }
         public string _Password { get; set; }
+        private static OracleConnection con { get; set; } = null;
 
         public AddAssignment(string _Username, string _Password)
         {
             this._Username = _Username;
             this._Password = _Password;
             InitializeComponent();
+            loadMADA();
+            loadMANV();
+        }
+
+        private void CreateConnection()
+        {
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={this._Username};Password={this._Password};";
+            con = new OracleConnection(conn);
         }
 
         private void Insert_Click(object sender, RoutedEventArgs e)
@@ -37,10 +48,7 @@ namespace App
             string manv = MANVinsert.Text;
             string mada = MADAinsert.Text;
             string thoigian = THOIGIANinsert.Text;
-            MessageBox.Show(manv + " " + mada + " " + thoigian+" "+_Username+" "+_Password);
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
             try
             {
                 con.Open();
@@ -52,13 +60,12 @@ namespace App
                 command.Parameters.Add("THOIGIAN", OracleDbType.Varchar2).Value = thoigian;
 
                 int rowsInsert = command.ExecuteNonQuery();
-                MessageBox.Show("insert: " + rowsInsert);
                 if (rowsInsert > 0)
                     OneMessage?.Invoke(new string("Success!!!"));
             }
             catch (Exception es)
             {
-                MessageBox.Show(es.Message);
+                MessageBox.Show("App have a problem!!!");
                 return;
             }
             finally
@@ -71,8 +78,77 @@ namespace App
 
         private void Cancle_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("cancel");
             this.Close();
+        }
+
+        private void loadMADA()
+        {
+            CreateConnection();
+            string manv = this._Username.Substring(2);
+            try
+            {
+                con.Open();
+                OracleCommand oracleCommand = new OracleCommand($"select distinct(MADA) from system.dean where phong in (select phg from system.nhanvien where manv =:MANV)", con);
+                oracleCommand.Parameters.Add("MANV",OracleDbType.Varchar2).Value = manv;
+                OracleDataReader reader = oracleCommand.ExecuteReader();
+                ObservableCollection<string> list = new ObservableCollection<string>();
+                while (reader.Read())
+                {
+                    string MAPB = reader.GetString(0);
+                    list.Add(MAPB);
+                    DateTime dateTime = DateTime.Now;
+                    THOIGIANinsert.Text = dateTime.ToString("dd/MM/yyyy");
+                }
+                if (list.Count > 0)
+                {
+                    MADAinsert.ItemsSource = list;
+                    MADAinsert.SelectedItem = list[0];
+                }
+            }
+            catch (Exception )
+            {
+                MessageBox.Show("App have a problem!!!");
+                return;
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+        private void loadMANV()
+        {
+            CreateConnection();
+            string manv = this._Username.Substring(2);
+            try
+            {
+                con.Open();
+                OracleCommand oracleCommand = new OracleCommand($"select manv from system.nhanvien where manv != :MANV and phg in (select phg from system.nhanvien where manv =:MANV1)", con);
+                oracleCommand.Parameters.Add("MANV", OracleDbType.Varchar2).Value = manv;
+                oracleCommand.Parameters.Add("MANV1", OracleDbType.Varchar2).Value = manv;
+                OracleDataReader reader = oracleCommand.ExecuteReader();
+                ObservableCollection<string> list = new ObservableCollection<string>();
+                while (reader.Read())
+                {
+                    string MAPB = reader.GetString(0);
+                    list.Add(MAPB);
+                }
+                if (list.Count > 0)
+                {
+                    MANVinsert.ItemsSource = list;
+                    MANVinsert.SelectedItem = list[0];
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("App have a problem!!!");
+                return;
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
         }
     }
 }

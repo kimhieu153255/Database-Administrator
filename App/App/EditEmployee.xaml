@@ -11,7 +11,7 @@
         <StackPanel x:Name="Personel">
             <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
                 <TextBlock Text="MANV" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
-                <TextBox Text="{Binding MANV}" IsReadOnly="True" x:Name="MANV"  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center" Margin="0,0,10,0" />
+                <TextBox Text="{Binding MANV}" IsReadOnly="True" Background="LightGray" x:Name="MANV"  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" VerticalContentAlignment="Center" Margin="0,0,10,0" />
                 <TextBlock Text="TENNV" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
                 <TextBox  Text="{Binding TENNV}" x:Name="TENNV" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center"/>
             </StackPanel>

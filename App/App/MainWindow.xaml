@@ -303,13 +303,13 @@
                     <StackPanel HorizontalAlignment="Center" Margin="0,10,10,10" x:Name="AboutEmployee" Grid.Column="0" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
                             <TextBlock Text="MANV" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
-                            <TextBox Text="{Binding MANV,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="MANV"  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center" Margin="0,0,10,0" />
+                            <TextBox Text="{Binding MANV,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Background="LightGray" x:Name="MANV"  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" VerticalContentAlignment="Center" Margin="0,0,10,0" />
                             <TextBlock Text="TENNV" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
-                            <TextBox  Text="{Binding TENNV,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="TENNV" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center"/>
+                            <TextBox  Text="{Binding TENNV,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  IsReadOnly="True" Background="LightGray" x:Name="TENNV" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" VerticalContentAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
                             <TextBlock Text="PHAI" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
-                            <TextBox Text="{Binding PHAI,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="PHAI" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBox Text="{Binding PHAI,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  IsReadOnly="True" Background="LightGray" x:Name="PHAI" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
                             <TextBlock Text="NGAYSINH" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
                             <TextBox Text="{Binding NGAYSINH,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="NGAYSINH" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center"/>
                         </StackPanel>
@@ -321,19 +321,19 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
                             <TextBlock Text="LUONG" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
-                            <TextBox Text="{Binding LUONG,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="LUONG" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBox Text="{Binding LUONG,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  IsReadOnly="True" Background="LightGray" x:Name="LUONG" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
                             <TextBlock Text="PHUCAP" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
-                            <TextBox Text="{Binding PHUCAP,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="PHUCAP" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center"/>
+                            <TextBox Text="{Binding PHUCAP,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  IsReadOnly="True" Background="LightGray" x:Name="PHUCAP" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" VerticalContentAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
                             <TextBlock Text="VAITRO" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
-                            <TextBox Text="{Binding VAITRO,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="VAITRO" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center"  Margin="0,0,10,0"/>
+                            <TextBox Text="{Binding VAITRO,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  IsReadOnly="True" Background="LightGray" x:Name="VAITRO" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" VerticalContentAlignment="Center"  Margin="0,0,10,0"/>
                             <TextBlock Text="MANQL" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
-                            <TextBox Text="{Binding MANQL,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="MANQL" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center"/>
+                            <TextBox Text="{Binding MANQL,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  IsReadOnly="True" Background="LightGray" x:Name="MANQL" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" VerticalContentAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
                             <TextBlock Text="PHG" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
-                            <TextBox Text="{Binding PHG,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="PHG" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" Background="Transparent" VerticalContentAlignment="Center" Margin="0,0,20,0"/>
+                            <TextBox Text="{Binding PHG,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  IsReadOnly="True" Background="LightGray" x:Name="PHG" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="300" VerticalContentAlignment="Center" Margin="0,0,20,0"/>
                             <StackPanel Width="380">
                             </StackPanel>
                         </StackPanel>

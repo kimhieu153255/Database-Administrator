@@ -19,6 +19,7 @@ using Oracle.ManagedDataAccess.Types;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace App
 {
@@ -98,6 +99,8 @@ namespace App
         private ObservableCollection<Table> listPrivTableAdmin { get; set; }
         private static string role_user { get; set; } = string.Empty;
 
+        private static OracleConnection con { get; set; } = null;
+        
         public MainWindow()
         {
             listPrivTableAdmin = new ObservableCollection<Table>();
@@ -112,6 +115,13 @@ namespace App
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        private void CreateConnection()
+        {
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            con = new OracleConnection(conn);
+        }
 
         private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -149,7 +159,7 @@ namespace App
         private void Btn_ListAdmin_Show(object sender, RoutedEventArgs e)
         {
             changeGuiLogged("listAM");
-            displayTableListUser();
+            LoadListUserAdmin();
         }
 
 
@@ -172,12 +182,6 @@ namespace App
             GrantRole.Visibility = Visibility.Collapsed;
             SearchPriRoleUser.Visibility = Visibility.Collapsed;
             About.Visibility = Visibility.Collapsed;
-            //for Employee
-            managementEmployee.Visibility = Visibility.Collapsed;
-            AboutEmployee.Visibility = Visibility.Collapsed;
-            ShowDeAn.Visibility = Visibility.Collapsed;
-            ShowPhongBan.Visibility = Visibility.Collapsed;
-            ShowAssignment.Visibility = Visibility.Collapsed;
             switch (nameGui)
             {
                 case "login":
@@ -219,26 +223,6 @@ namespace App
                 case "About":
                     LabeMainField.Content = "ABOUT MEMBERS OF GROUP 5";
                     About.Visibility = Visibility.Visible;
-                    break;
-                case "ManagementEmployee":
-                    LabeMainField.Content = "MONITOR EMPLOYEE";
-                    managementEmployee.Visibility = Visibility.Visible;
-                    break;
-                case "AboutEmployee":
-                    LabeMainField.Content = "ABOUT EMPLOYEE";
-                    AboutEmployee.Visibility = Visibility.Visible;
-                    break;
-                case "ShowDeAnTable":
-                    LabeMainField.Content = "PROJECTS";
-                    ShowDeAn.Visibility = Visibility.Visible;
-                    break;
-                case "ShowPhongBanTable":
-                    LabeMainField.Content = "DEPARTMENTS";
-                    ShowPhongBan.Visibility = Visibility.Visible;
-                    break;
-                case "ShowAssignmentTable":
-                    LabeMainField.Content = "Assignments";
-                    ShowAssignment.Visibility = Visibility.Visible;
                     break;
                 default:
                     break;
@@ -333,6 +317,7 @@ namespace App
             usernameBox.Clear();
             passwordBox.Clear();
             errLabel.Content = string.Empty;
+            errLabel.Visibility = Visibility.Collapsed;
         }
 
         private void cleanDelete()
@@ -376,7 +361,6 @@ namespace App
             errLabelSearcPrivRole.Visibility = Visibility.Collapsed;
             dataPrivRole.ItemsSource = null;
             dataPrivRole.Visibility = Visibility.Collapsed;
-
             SearchPriRole.Visibility = Visibility.Collapsed;
         }
 
@@ -404,18 +388,12 @@ namespace App
             cleanAboutUser();
         }
 
-        private void cleanGUI()
-        {
-            cleanAdminGui();
-            cleanEmployeeGui();
-        }
-
         private void password_changed(object sender, RoutedEventArgs e)
         {
             errLabelAdd.Visibility = Visibility.Visible;
             if (passwordBoxRegister.Password != againPasswordBoxRegister.Password)
             {
-                errLabelAdd.Content = "Password dont match!!!";
+                errLabelAdd.Content = "Password don't match!!!";
                 errLabelAdd.Foreground = new SolidColorBrush(Colors.Red);
             }
             else
@@ -425,7 +403,7 @@ namespace App
             }
         }
 
-        public void displayTableListUser()
+        public void LoadListUserAdmin()
         {
             string hostName = Environment.MachineName;
             string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
@@ -448,12 +426,15 @@ namespace App
                 }
                 dataTable.Height = mainScreen.ActualHeight - 100;
                 dataTable.ItemsSource = listT;
-                con.Close();
-                con.Dispose();
             }
             catch (Exception)
             {
                 return;
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
             }
         }
 
@@ -516,9 +497,9 @@ namespace App
                 errLabelDelete.Foreground = new SolidColorBrush(Colors.Red);
                 return;
             }
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
+            //string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            //OracleConnection con = new OracleConnection(conn);
             try
             {
                 con.Open();
@@ -581,7 +562,6 @@ namespace App
                 oracleCommand.ExecuteNonQuery();
                 string resultvalue = (string)oracleCommand.Parameters["OUTPUT1"].Value.ToString();
                 string role = oracleCommand.Parameters["OUTPUT2"].IsNullable?"null": oracleCommand.Parameters["OUTPUT2"].Value.ToString();
-                MessageBox.Show(resultvalue+" "+role);
 
                 if (resultvalue == "Admin")
                 {
@@ -592,7 +572,7 @@ namespace App
                     AdminPanel.Visibility = Visibility.Visible;
                     changeGuiLogged("listAM");
                     //Display list admin
-                    displayTableListUser();
+                    LoadListUserAdmin();
                 }
                 else if (resultvalue == "Employee")
                 {
@@ -612,8 +592,6 @@ namespace App
                     errLabel.Foreground = new SolidColorBrush(Colors.Red);
                     errLabel.Visibility = Visibility.Visible;
                 }
-                //CleanGui
-                //cleanLoginGui();
             }
             catch (Exception)
             {
@@ -625,7 +603,7 @@ namespace App
             finally
             {
                 connection.Close();
-                connection.Dispose();
+                //connection.Dispose();
             }
         }
 
@@ -669,9 +647,9 @@ namespace App
                 return;
             }
 
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
+            //string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            //OracleConnection con = new OracleConnection(conn);
             try
             {
                 con.Open();
@@ -741,9 +719,9 @@ namespace App
         private void Btn_DeleteRole(object sender, RoutedEventArgs e)
         {
             string roleName = nameRoleCreateDelete.Text;
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
+            //string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            //OracleConnection con = new OracleConnection(conn);
             try
             {
                 con.Open();
@@ -778,9 +756,9 @@ namespace App
         private void Btn_CreateRole(object sender, RoutedEventArgs e)
         {
             string roleName = nameRoleCreateDelete.Text;
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
+            //string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            //OracleConnection con = new OracleConnection(conn);
             try
             {
                 con.Open();
@@ -812,9 +790,9 @@ namespace App
         {
             dataPriRole.Visibility = Visibility.Collapsed;
             string name = nameRoleSearch.Text;
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
+            //string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            //OracleConnection con = new OracleConnection(conn);
             try
             {
                 con.Open();
@@ -857,9 +835,9 @@ namespace App
         {
             dataPrivRole.Visibility = Visibility.Collapsed;
             string name = nameRole.Text;
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
+            //string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            //OracleConnection con = new OracleConnection(conn);
             try
             {
                 con.Open();
@@ -900,9 +878,9 @@ namespace App
         {
             dataRole.Visibility = Visibility.Collapsed;
             string name = nameRoleSearch.Text;
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
+            //string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            //OracleConnection con = new OracleConnection(conn);
             try
             {
                 con.Open();
@@ -945,9 +923,9 @@ namespace App
         {
             string roleName = nameRoleGrant.Text;
             string username = nameUser.Text;
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
+            //string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            //OracleConnection con = new OracleConnection(conn);
             try
             {
                 con.Open();
@@ -978,9 +956,9 @@ namespace App
         {
             string roleName = nameRoleGrant.Text;
             string username = nameUser.Text;
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
+            //string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            //OracleConnection con = new OracleConnection(conn);
             try
             {
                 con.Open();
@@ -1010,9 +988,9 @@ namespace App
         // Handle Grant Priv
         private string GrantPrivilege(bool t, string priv, string nameObject, string nameTable, int flag)
         {
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
+            //string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            //OracleConnection con = new OracleConnection(conn);
             try
             {
                 con.Open();
@@ -1103,7 +1081,6 @@ namespace App
                     if (err != "")
                         listError.Add(err);
                 }
-                MessageBox.Show(name + " " + select + " " + insert + " " + update + " " + delete);
                 dataRoleErr.ItemsSource = listError;
                 dataRoleErr.Visibility = Visibility.Visible;
             }
@@ -1117,18 +1094,19 @@ namespace App
         }
 
         //========================================================================================================================================================\\
- 
-
+        
+        //Event show Employee for monitor
         private void Btn_MonitorEmployee_show(object sender, RoutedEventArgs e)
         {
             changeGuiEmployeeLogged("ManagementEmployee");
         }
 
+        //Event load Employee
         private void MonitorEmployee_Load()
         {
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
+            //string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            //OracleConnection con = new OracleConnection(conn);
             string p_MANV = _Username.Substring(2);
             try
             {
@@ -1179,9 +1157,9 @@ namespace App
 
         private void Btn_AboutEmployee(object sender, RoutedEventArgs e)
         {
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
+            //string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            //OracleConnection con = new OracleConnection(conn);
             string p_MANV = _Username.Substring(2);
             try
             {
@@ -1225,9 +1203,32 @@ namespace App
             string diachi = DIACHI.Text;
             string sodt = SODT.Text;
 
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            //check Day
+            DateTime date;
+            bool isValid = DateTime.TryParseExact(ngaysinh, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out date);
+            if (isValid == false)
+            {
+                MessageBox.Show("Please fill NGAYSINH follow format: dd/mm/yyyy !!!");
+                return;
+            }
+
+            //check Project name
+            if (diachi == "")
+            {
+                MessageBox.Show("Please fill DIACHI!!!");
+                return;
+            }
+
+            // check phone number
+            if (Regex.IsMatch(sodt, @"^\d{10}$") == false)
+            {
+                MessageBox.Show("Phone number invalid!!!");
+                return;
+            }
+
+            CreateConnection();
+            //string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            //OracleConnection con = new OracleConnection(conn);
             try
             {
                 con.Open();
@@ -1255,12 +1256,11 @@ namespace App
                     UpdateAboutEmployee.Foreground = new SolidColorBrush(Colors.Red);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 UpdateAboutEmployee.Text = "Failure!!!";
                 UpdateAboutEmployee.Visibility = Visibility.Visible;
                 UpdateAboutEmployee.Foreground = new SolidColorBrush(Colors.Red);
-                MessageBox.Show(ex.Message);
             }
             finally
             {
@@ -1271,9 +1271,9 @@ namespace App
 
         private void Btn_DeAn_show(object sender, RoutedEventArgs e)
         {
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
+            //string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            //OracleConnection con = new OracleConnection(conn);
             try
             {
                 con.Open();
@@ -1317,9 +1317,9 @@ namespace App
 
         private void Btn_PhongBan_show(object sender, RoutedEventArgs e)
         {
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
+            //string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            //OracleConnection con = new OracleConnection(conn);
             try
             {
                 con.Open();
@@ -1362,9 +1362,9 @@ namespace App
 
         private void Btn_Assignment_show(object sender, RoutedEventArgs e)
         {
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
+            //string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            //OracleConnection con = new OracleConnection(conn);
             try
             {
                 con.Open();
@@ -1413,9 +1413,7 @@ namespace App
                 MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this assignment?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
-                    string hostName = Environment.MachineName;
-                    string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-                    OracleConnection con = new OracleConnection(conn);
+                    CreateConnection();
                     try
                     {
                         con.Open();
@@ -1453,7 +1451,6 @@ namespace App
                 optionPanel.Show();
                 optionPanel.OneMessage += (string mess, Assignment asign) =>
                 {
-                    MessageBox.Show(mess);
                     if (mess == "Success!!!")
                         Btn_Assignment_show(sender, e);
                 };
@@ -1466,7 +1463,6 @@ namespace App
             addAssignment.Show();
             addAssignment.OneMessage += (string mess) =>
             {
-                MessageBox.Show(mess);
                 if (mess == "Success!!!")
                     Btn_Assignment_show(sender, e);
             };
@@ -1482,7 +1478,6 @@ namespace App
                 optionPanel.Show();
                 optionPanel.OneMessage += (string mess, Project pro) =>
                 {
-                    MessageBox.Show(mess);
                     if (mess == "Success!!!")
                         Btn_DeAn_show(sender, e);
                 };
@@ -1497,9 +1492,7 @@ namespace App
                 MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this Project?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
-                    string hostName = Environment.MachineName;
-                    string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-                    OracleConnection con = new OracleConnection(conn);
+                    CreateConnection();
                     try
                     {
                         con.Open();
@@ -1532,7 +1525,6 @@ namespace App
             addProject.Show();
             addProject.OneMessage += (string mess) =>
             {
-                MessageBox.Show(mess);
                 if (mess == "Success!!!")
                     Btn_DeAn_show(sender, e);
             };
@@ -1547,7 +1539,6 @@ namespace App
                 optionPanel.Show();
                 optionPanel.OneMessage += (string mess) =>
                 {
-                    MessageBox.Show(mess);
                     if (mess == "Success!!!")
                         MonitorEmployee_Load();
                 };
@@ -1560,7 +1551,6 @@ namespace App
             addEmployee.Show();
             addEmployee.OneMessage += (string mess) =>
             {
-                MessageBox.Show(mess);
                 if (mess == "Success!!!")
                     MonitorEmployee_Load();
             };

@@ -26,6 +26,8 @@ namespace App
         public Project Pro { get; set; }
         public string _Username { get; set; }
         public string _Password { get; set; }
+
+        private static OracleConnection con { get; set; } = null;
         public EditProject(Project data, string _Username, string _Password)
         {
             this.Pro = data;
@@ -33,8 +35,15 @@ namespace App
             this._Password = _Password;
             DataContext = this.Pro;
             InitializeComponent();
-            loadMada();
+            //loadMada();
             loadPhong();
+        }
+
+        private void CreateConnection()
+        {
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={this._Username};Password={this._Password};";
+            con = new OracleConnection(conn);
         }
         private void Update_Click(object sender, RoutedEventArgs e)
         {
@@ -42,23 +51,19 @@ namespace App
             Pro.TENDA = TENDA.Text;
             Pro.NGAYBD = NGAYBD.Text;
             Pro.PHONG = (string)PHONG_Update.SelectedValue;
-            MessageBox.Show(Pro.MADA + " " + Pro.TENDA + " " + Pro.NGAYBD + " " + Pro.PHONG);
 
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
             try
             {
                 con.Open();
                 OracleCommand command = con.CreateCommand();
-                command.CommandText = $"UPDATE system.DEAN SET TENDA=:TENDA, NGAYBD =: TO_DATE(:NGAYBD, 'DD/MM/YYYY'), PHONG=:PHONG where MADA = :MADA";
+                command.CommandText = $"UPDATE system.DEAN SET TENDA=:TENDA, NGAYBD = TO_DATE(:NGAYBD, 'DD/MM/YYYY'), PHONG=:PHONG where MADA = :MADA";
                 command.Parameters.Add("TENDA", OracleDbType.Varchar2).Value = Pro.TENDA;
                 command.Parameters.Add("NGAYBD", OracleDbType.Varchar2).Value = Pro.NGAYBD;
                 command.Parameters.Add("PHONG", OracleDbType.Varchar2).Value = Pro.PHONG;
                 command.Parameters.Add("MADA", OracleDbType.Varchar2).Value = Pro.MADA;
 
                 int rowsUpdated = command.ExecuteNonQuery();
-                MessageBox.Show("update: " + rowsUpdated);
                 if (rowsUpdated > 0)
                     OneMessage?.Invoke(new string("Success!!!"), Pro);
             }
@@ -76,15 +81,12 @@ namespace App
 
         private void Cancle_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("cancel");
             this.Close();
         }
 
         private void loadPhong()
         {
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
             try
             {
                 con.Open();
@@ -105,38 +107,7 @@ namespace App
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                return;
-            }
-            finally
-            {
-                con.Close();
-                con.Dispose();
-            }
-        }
-        private void loadMada()
-        {
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
-            try
-            {
-                con.Open();
-                OracleCommand oracleCommand = new OracleCommand($"select Max(MADA) from system.dean", con);
-                OracleDataReader reader = oracleCommand.ExecuteReader();
-
-                if (reader.Read())
-                {
-                    string mada = reader.GetString(0);
-                    int temp = int.Parse(mada);
-                    temp++;
-                    string newMADA = temp.ToString("0000");
-                    MADA.Text = newMADA;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("App have a problem!!!");
                 return;
             }
             finally

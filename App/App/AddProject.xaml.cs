@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,8 @@ namespace App
         public event sendMessage OneMessage;
         public string _Username { get; set; }
         public string _Password { get; set; }
+        private static OracleConnection con { get; set; } = null;
+
 
         public AddProject(string _Username, string _Password)
         {
@@ -36,12 +39,16 @@ namespace App
             loadMada();
         }
 
+        private void CreateConnection()
+        {
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={this._Username};Password={this._Password};";
+            con = new OracleConnection(conn);
+        }
 
         private void loadPhong()
         {
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
             try
             {
                 con.Open();
@@ -59,7 +66,7 @@ namespace App
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("App have a problem!!!");
                 return;
             }
             finally
@@ -70,9 +77,7 @@ namespace App
         }
         private void loadMada()
         {
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+            CreateConnection();
             try
             {
                 con.Open();
@@ -92,7 +97,7 @@ namespace App
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("App have a problem!!!");
                 return;
             }
             finally
@@ -108,10 +113,24 @@ namespace App
             string tenda = TENDAinsert.Text;
             string ngaybd = NGAYBDinsert.Text;
             string phong =(string)PHONGinsert.SelectedValue;
-            MessageBox.Show(mada + " " + tenda + " " + ngaybd + " " + phong + " " + _Username + " " + _Password);
-            string hostName = Environment.MachineName;
-            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
-            OracleConnection con = new OracleConnection(conn);
+
+            //check Day
+            DateTime date;
+            bool isValid = DateTime.TryParseExact(ngaybd, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out date);
+            if (isValid == false)
+            {
+                MessageBox.Show("Please fill NGAYSINH follow format: dd/mm/yyyy !!!");
+                return;
+            }
+
+            //check Project name
+            if (tenda == "")
+            {
+                MessageBox.Show("Please fill TENDA!!!");
+                return;
+            }
+
+            CreateConnection();
             try
             {
                 con.Open();
@@ -124,13 +143,12 @@ namespace App
                 command.Parameters.Add("PHONG",OracleDbType.Varchar2).Value = phong;
 
                 int rowsInsert = command.ExecuteNonQuery();
-                MessageBox.Show("insert: " + rowsInsert);
                 if (rowsInsert > 0)
                     OneMessage?.Invoke(new string("Success!!!"));
             }
             catch (Exception es)
             {
-                MessageBox.Show(es.Message);
+                MessageBox.Show("App have a problem!!!"); 
                 return;
             }
             finally
