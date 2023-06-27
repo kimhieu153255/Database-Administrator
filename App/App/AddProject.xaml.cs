@@ -118,8 +118,8 @@ namespace App
                 OracleCommand command = con.CreateCommand();
                 command.CommandText = "insert into system.DeAn values (:MADA, :TENDA, TO_DATE(:NGAYBD, 'DD/MM/YYYY'),:PHONG)";
 
-                command.Parameters.Add("MANV", OracleDbType.Varchar2).Value = mada;
-                command.Parameters.Add("MADA", OracleDbType.Varchar2).Value = tenda;
+                command.Parameters.Add("MADA", OracleDbType.Varchar2).Value = mada;
+                command.Parameters.Add("TENDA", OracleDbType.Varchar2).Value = tenda;
                 command.Parameters.Add("NGAYBD", OracleDbType.Varchar2).Value = ngaybd;
                 command.Parameters.Add("PHONG",OracleDbType.Varchar2).Value = phong;
 

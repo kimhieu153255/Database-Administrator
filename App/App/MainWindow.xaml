@@ -285,9 +285,18 @@
                                 <DataGridTextColumn Header="VAITRO" Binding="{Binding VAITRO}" Width="0.17*"  />
                                 <DataGridTextColumn Header="MANQL" Binding="{Binding MANQL}" Width="0.17*" />
                                 <DataGridTextColumn Header="PHG" Binding="{Binding PHG}" Width="0.15*"  />
+                                
+                                <DataGridTemplateColumn Width="80" x:Name="Btn_Employee_Edit" Visibility="Collapsed">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="Edit" Click="Btn_EditEmployee" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                         <Label x:Name="ErrEmployeeManagement" Visibility="Collapsed" Foreground="Red"/>
+                        <Button Width="100" x:Name="Btn_Employee_Insert" Content="Insert" Height="45" FontSize="16" FontWeight="SemiBold" Click="InsertEmployee_Click" Margin="5,10,0,0"/>
                     </StackPanel>
 
                     <!--About Employee-->
@@ -340,15 +349,15 @@
                                 <DataGridTextColumn Header="TENDA" Binding="{Binding TENDA, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.17*" />
                                 <DataGridTextColumn Header="NGAYBD" Binding="{Binding NGAYBD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.15*"/>
                                 <DataGridTextColumn Header="PHONG" Binding="{Binding PHONG, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.2*" />
-                                <DataGridTemplateColumn Width="100">
+                                <DataGridTemplateColumn Width="100" x:Name="Btn_Project_Edit" Visibility="Collapsed">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Button Content="Edit" Click="Btn_EditProject" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Width="100">
-                                    <DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn Width="100" x:Name="Btn_Project_Delete" Visibility="Collapsed">
+                                    <DataGridTemplateColumn.CellTemplate >
                                         <DataTemplate>
                                             <Button Content="Delete" Click="Btn_DeleteProject" />
                                         </DataTemplate>
@@ -357,7 +366,7 @@
                             </DataGrid.Columns>
                         </DataGrid>
                         <Label x:Name="ErrShowDeAn" Visibility="Collapsed" Foreground="Red"/>
-                        <Button Width="100" Content="Insert" Height="45" FontSize="16" FontWeight="SemiBold" Click="InsertProject_Click" Margin="5,0,0,0"/>
+                        <Button Width="100" x:Name="Btn_Project_Insert" Content="Insert" Height="45" FontSize="16" FontWeight="SemiBold" Click="InsertProject_Click" Margin="5,10,0,0"/>
                     </StackPanel>
 
                     <!--PHONGBAN-->
@@ -367,27 +376,26 @@
                                 <DataGridTextColumn Header="MAPB" Binding="{Binding MAPB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <DataGridTextColumn Header="TENPB" Binding="{Binding TENPB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.17*" />
                                 <DataGridTextColumn Header="TRPHG" Binding="{Binding TRPHG, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.15*"/>
-                                
                             </DataGrid.Columns>
                         </DataGrid>
                         <Label x:Name="ErrShowPhongBan" Visibility="Collapsed" Foreground="Red"/>
                     </StackPanel>
 
-                    <!--PhanCong-->
+                    <!--PhanCong <Assignment>-->
                     <StackPanel HorizontalAlignment="Center" x:Name="ShowAssignment" Visibility="Collapsed">
                         <DataGrid x:Name="ShowAssignmentTable" AutoGenerateColumns="False" ScrollViewer.VerticalScrollBarVisibility="Auto" CanUserResizeColumns="False" >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="MANV" Binding="{Binding MANV, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <DataGridTextColumn Header="MADA" Binding="{Binding MADA, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.17*" />
                                 <DataGridTextColumn Header="THOIGIAN" Binding="{Binding THOIGIAN, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="0.15*"/>
-                                <DataGridTemplateColumn Width="100">
+                                <DataGridTemplateColumn Width="100" x:Name="Btn_Assignment_Edit">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Button Content="Edit" Click="Btn_EditAssignment" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Width="100">
+                                <DataGridTemplateColumn Width="100" x:Name="Btn_Assignment_Delete">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Button Content="Delete" Click="Btn_DeleteAssignment" />
@@ -397,7 +405,7 @@
                             </DataGrid.Columns>
                         </DataGrid>
                         <Label x:Name="ErrShowAssignment" Visibility="Collapsed" Foreground="Red"/>
-                        <Button Width="100" Content="Insert" Height="45" FontSize="16" FontWeight="SemiBold" Click="InsertAssignment_Click" Margin="5,0,0,0"/>
+                        <Button Width="100" x:Name="Btn_Assignment_Insert" Content="Insert" Height="45" FontSize="16" FontWeight="SemiBold" Click="InsertAssignment_Click" Margin="5,10,0,0"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>

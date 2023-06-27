@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:App"
         mc:Ignorable="d"
-        Title="Update Project" Height="300" MinWidth="500" Width="600">
+        Title="Update Project" Height="320" MinWidth="500" Width="600">
     <StackPanel HorizontalAlignment="Center" Margin="20,0,20,20" x:Name="EditPanel" Visibility="Visible">
         <Label Name="LabelEdit" HorizontalAlignment="Center" Height="70" FontSize="30" FontWeight="SemiBold" VerticalContentAlignment="Center">Update Project</Label>
         <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
@@ -18,7 +18,7 @@
             <TextBlock Text="NGAYBD" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
             <TextBox Text="{Binding NGAYBD}" x:Name="NGAYBD" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
             <TextBlock Text="PHONG" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
-            <ComboBox x:Name="PHONG_Update" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center"/>
+            <ComboBox x:Name="PHONG_Update" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center"/>
         </StackPanel>
         <TextBlock Text="Ex: 25/05/2023" VerticalAlignment="Center" FontSize="16" FontWeight="SemiBold" TextAlignment="Left" Padding="100,0,0,0"/>
         <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,10,0,5" >

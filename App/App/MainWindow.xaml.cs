@@ -96,8 +96,7 @@ namespace App
         private string _Username { get; set; } = string.Empty;
         private string _Password { get; set; } = string.Empty;
         private ObservableCollection<Table> listPrivTableAdmin { get; set; }
-        private BindingList<Employee> listEmployeeMonitor { get; set; }
-        private static string role_user { get; set; }
+        private static string role_user { get; set; } = string.Empty;
 
         public MainWindow()
         {
@@ -122,14 +121,17 @@ namespace App
             dataPriRole.MaxHeight = mainScreen.ActualHeight - 300;
             dataRole.MaxHeight = mainScreen.ActualHeight - 300;
             // for Employee Gui
-            EmployeeManagement.MaxHeight = mainScreen.ActualHeight - 150;
+            EmployeeManagement.MaxHeight = mainScreen.ActualHeight - 180;
             EmployeeManagement.MaxWidth = mainScreen.ActualWidth - 10;
+
             ShowDeAnTable.MaxWidth = mainScreen.ActualWidth - 20;
-            ShowDeAnTable.MaxHeight = mainScreen.ActualHeight - 150;
+            ShowDeAnTable.MaxHeight = mainScreen.ActualHeight - 180;
+
             ShowPhongBanTable.MaxWidth = mainScreen.ActualWidth - 40;
             ShowPhongBanTable.MaxHeight = mainScreen.ActualHeight - 150;
+
             ShowAssignmentTable.MaxWidth = mainScreen.ActualWidth - 40;
-            ShowAssignmentTable.MaxHeight = mainScreen.ActualHeight - 150;
+            ShowAssignmentTable.MaxHeight = mainScreen.ActualHeight - 180;
         }
 
         private void Btn_Login_show(object sender, RoutedEventArgs e)
@@ -160,6 +162,7 @@ namespace App
         private void changeGuiLogged(string nameGui)
         {
             cleanAdminGui();
+            //for admin
             TableGui.Visibility = Visibility.Collapsed;
             LoginGui.Visibility = Visibility.Collapsed;
             RegisterGui.Visibility = Visibility.Collapsed;
@@ -169,6 +172,7 @@ namespace App
             GrantRole.Visibility = Visibility.Collapsed;
             SearchPriRoleUser.Visibility = Visibility.Collapsed;
             About.Visibility = Visibility.Collapsed;
+            //for Employee
             managementEmployee.Visibility = Visibility.Collapsed;
             AboutEmployee.Visibility = Visibility.Collapsed;
             ShowDeAn.Visibility = Visibility.Collapsed;
@@ -239,6 +243,80 @@ namespace App
                 default:
                     break;
             }
+        }
+
+        private void changeGuiEmployeeLogged(string nameGui)
+        {
+            cleanEmployeeGui();
+            LoginGui.Visibility = Visibility.Collapsed;
+            //monitor
+            managementEmployee.Visibility = Visibility.Collapsed;
+            Btn_Employee_Edit.Visibility = Visibility.Collapsed;
+            Btn_Employee_Insert.Visibility = Visibility.Collapsed;
+            //about user
+            AboutEmployee.Visibility = Visibility.Collapsed;
+            //show Project
+            ShowDeAn.Visibility = Visibility.Collapsed;
+            Btn_Project_Edit.Visibility =Visibility.Collapsed;
+            Btn_Project_Delete.Visibility = Visibility.Collapsed;
+            Btn_Project_Insert.Visibility = Visibility.Collapsed;
+            //show Department
+            ShowPhongBan.Visibility = Visibility.Collapsed;
+            //show Assignment
+            ShowAssignment.Visibility = Visibility.Collapsed;
+            Btn_Assignment_Delete.Visibility = Visibility.Collapsed;
+            Btn_Assignment_Edit.Visibility = Visibility.Collapsed;
+            Btn_Assignment_Insert.Visibility=Visibility.Collapsed;
+
+            switch (nameGui)
+            {
+                case "login":
+                    LabeMainField.Content = "LOGIN";
+                    LoginGui.Visibility = Visibility.Visible;
+                    break;
+                case "ManagementEmployee":
+                    LabeMainField.Content = "MONITOR EMPLOYEE";
+                    managementEmployee.Visibility = Visibility.Visible;
+                    if (role_user == "Nhan su")
+                    {
+                        Btn_Employee_Edit.Visibility = Visibility.Visible;
+                        Btn_Employee_Insert.Visibility = Visibility.Visible;
+                    }
+                    else if(role_user =="Tai chinh")
+                        Btn_Employee_Edit.Visibility = Visibility.Visible;
+                    break;
+                case "AboutEmployee":
+                    LabeMainField.Content = "ABOUT EMPLOYEE";
+                    AboutEmployee.Visibility = Visibility.Visible;
+                    break;
+                case "ShowDeAnTable":
+                    LabeMainField.Content = "PROJECTS";
+                    ShowDeAn.Visibility = Visibility.Visible;
+                    if(role_user=="Truong de an")
+                    {
+                        Btn_Project_Edit.Visibility = Visibility.Visible;
+                        Btn_Project_Delete.Visibility = Visibility.Visible;
+                        Btn_Project_Insert.Visibility = Visibility.Visible;
+                    }
+                    break;
+                case "ShowPhongBanTable":
+                    LabeMainField.Content = "DEPARTMENTS";
+                    ShowPhongBan.Visibility = Visibility.Visible;
+                    break;
+                case "ShowAssignmentTable":
+                    LabeMainField.Content = "Assignments";
+                    ShowAssignment.Visibility = Visibility.Visible;
+                    if(role_user=="Truong phong")
+                    {
+                        Btn_Assignment_Edit.Visibility = Visibility.Visible;
+                        Btn_Assignment_Delete.Visibility = Visibility.Visible;
+                        Btn_Assignment_Insert.Visibility = Visibility.Visible;
+                    }
+                    break;
+                default:
+                    break;
+            }
+
         }
 
         private void cleanAddGui()
@@ -313,7 +391,24 @@ namespace App
             cleanPrivRole();
         }
 
+        // for Employee
 
+        private void cleanAboutUser()
+        {
+            UpdateAboutEmployee.Text = string.Empty;
+            UpdateAboutEmployee.Visibility = Visibility.Collapsed;
+        }
+
+        private void cleanEmployeeGui()
+        {
+            cleanAboutUser();
+        }
+
+        private void cleanGUI()
+        {
+            cleanAdminGui();
+            cleanEmployeeGui();
+        }
 
         private void password_changed(object sender, RoutedEventArgs e)
         {
@@ -485,7 +580,7 @@ namespace App
                 oracleCommand.Parameters.Add("OUTPUT2", OracleDbType.Varchar2, 20).Direction = ParameterDirection.Output;
                 oracleCommand.ExecuteNonQuery();
                 string resultvalue = (string)oracleCommand.Parameters["OUTPUT1"].Value.ToString();
-                string role = oracleCommand.Parameters["OUTPUT2"].IsNullable?"null": (string)oracleCommand.Parameters["OUTPUT2"].Value.ToString();
+                string role = oracleCommand.Parameters["OUTPUT2"].IsNullable?"null": oracleCommand.Parameters["OUTPUT2"].Value.ToString();
                 MessageBox.Show(resultvalue+" "+role);
 
                 if (resultvalue == "Admin")
@@ -505,8 +600,8 @@ namespace App
                     _Username = username;
                     _Password = password;
                     role_user = role;
-                    changeGuiLogged("ManagementEmployee");
                     MonitorEmployee_Load();
+                    changeGuiEmployeeLogged("ManagementEmployee");
                     startPanel.Visibility = Visibility.Collapsed;
                     EmployeePanel.Visibility = Visibility.Visible;
                 }
@@ -518,7 +613,7 @@ namespace App
                     errLabel.Visibility = Visibility.Visible;
                 }
                 //CleanGui
-                cleanLoginGui();
+                //cleanLoginGui();
             }
             catch (Exception)
             {
@@ -540,6 +635,7 @@ namespace App
             _Username = string.Empty;
             _Password = string.Empty;
             changeGuiLogged("login");
+            changeGuiEmployeeLogged("login");
             SearchPriRole.Visibility = Visibility.Collapsed;
             //sidebar
             startPanel.Visibility = Visibility.Visible;
@@ -1020,11 +1116,12 @@ namespace App
             dataRoleErr.Visibility = Visibility.Collapsed;
         }
 
-
+        //========================================================================================================================================================\\
+ 
 
         private void Btn_MonitorEmployee_show(object sender, RoutedEventArgs e)
         {
-            changeGuiLogged("ManagementEmployee");
+            changeGuiEmployeeLogged("ManagementEmployee");
         }
 
         private void MonitorEmployee_Load()
@@ -1038,13 +1135,13 @@ namespace App
                 con.Open();
                 OracleCommand oracleCommand = new OracleCommand($"select * from system.nhanvien where MANV!={p_MANV}", con);
                 OracleDataReader reader = oracleCommand.ExecuteReader();
-                listEmployeeMonitor = new BindingList<Employee>();
+                BindingList<Employee> listEmployeeMonitor = new BindingList<Employee>();
                 while (reader.Read())
                 {
                     string manv = reader.GetString(0);
                     string tennv = reader.GetString(1);
                     string phai = reader.GetString(2);
-                    string ngaysinh = reader.GetDateTime(3).ToString("dd-MM-yyyy");
+                    string ngaysinh = reader.GetDateTime(3).ToString("dd/MM/yyyy");
                     string diachi = reader.GetString(4);
                     string sodt = reader.GetString(5);
                     string luong = reader.IsDBNull(6) ? "NULL" : reader.GetInt32(6).ToString();
@@ -1107,7 +1204,7 @@ namespace App
                     string phg = reader.IsDBNull(10) ? "NULL" : reader.GetString(10);
                     Employee employee = new Employee(manv, tennv, phai, ngaysinh, diachi, sodt, luong, phucap, vaitro, manql, phg);
                     AboutEmployee.DataContext = employee;
-                    changeGuiLogged("AboutEmployee");
+                    changeGuiEmployeeLogged("AboutEmployee");
                 }
             }
             catch (Exception)
@@ -1203,7 +1300,7 @@ namespace App
                     ErrShowDeAn.Visibility = Visibility.Visible;
                 }
                 ShowDeAnTable.ItemsSource = projects;
-                changeGuiLogged("ShowDeAnTable");
+                changeGuiEmployeeLogged("ShowDeAnTable");
             }
             catch (Exception)
             {
@@ -1248,7 +1345,7 @@ namespace App
                     ErrShowPhongBan.Visibility = Visibility.Visible;
                 }
                 ShowPhongBanTable.ItemsSource = Departments;
-                changeGuiLogged("ShowPhongBanTable");
+                changeGuiEmployeeLogged("ShowPhongBanTable");
             }
             catch (Exception)
             {
@@ -1293,7 +1390,7 @@ namespace App
                     ErrShowPhongBan.Visibility = Visibility.Visible;
                 }
                 ShowAssignmentTable.ItemsSource = assignments;
-                changeGuiLogged("ShowAssignmentTable");
+                changeGuiEmployeeLogged("ShowAssignmentTable");
             }
             catch (Exception)
             {
@@ -1329,7 +1426,7 @@ namespace App
                         int rowsDelete = oracleCommand.ExecuteNonQuery();
                         if (rowsDelete > 0)
                             Btn_Assignment_show(sender, e);
-                        changeGuiLogged("ShowAssignmentTable");
+                        changeGuiEmployeeLogged("ShowAssignmentTable");
                     }
                     catch (Exception)
                     {
@@ -1438,6 +1535,34 @@ namespace App
                 MessageBox.Show(mess);
                 if (mess == "Success!!!")
                     Btn_DeAn_show(sender, e);
+            };
+        }
+        private void Btn_EditEmployee(object sender, RoutedEventArgs e)
+        {
+            Employee employee = (Employee)EmployeeManagement.SelectedItem;
+            if (employee != null)
+            {
+                Employee temp = new Employee(employee.MANV, employee.TENNV,employee.PHAI,employee.NGAYSINH,employee.DIACHI,employee.SODT,employee.LUONG,employee.PHUCAP,employee.VAITRO,employee.MANQL,employee.PHG);
+                var optionPanel = new EditEmployee(role_user, _Username, _Password, temp);
+                optionPanel.Show();
+                optionPanel.OneMessage += (string mess) =>
+                {
+                    MessageBox.Show(mess);
+                    if (mess == "Success!!!")
+                        MonitorEmployee_Load();
+                };
+            }
+        }
+
+        private void InsertEmployee_Click(object sender, RoutedEventArgs e)
+        {
+            var addEmployee = new AddEmployee(_Username, _Password);
+            addEmployee.Show();
+            addEmployee.OneMessage += (string mess) =>
+            {
+                MessageBox.Show(mess);
+                if (mess == "Success!!!")
+                    MonitorEmployee_Load();
             };
         }
     }

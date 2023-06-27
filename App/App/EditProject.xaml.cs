@@ -33,6 +33,7 @@ namespace App
             this._Password = _Password;
             DataContext = this.Pro;
             InitializeComponent();
+            loadMada();
             loadPhong();
         }
         private void Update_Click(object sender, RoutedEventArgs e)
@@ -50,7 +51,7 @@ namespace App
             {
                 con.Open();
                 OracleCommand command = con.CreateCommand();
-                command.CommandText = $"UPDATE system.DEAN SET TENDA=:TENDA, NGAYBD = TO_DATE(:NGAYBD, 'DD/MM/YYYY'), PHONG=:PHONG where MADA = :MADA";
+                command.CommandText = $"UPDATE system.DEAN SET TENDA=:TENDA, NGAYBD =: TO_DATE(:NGAYBD, 'DD/MM/YYYY'), PHONG=:PHONG where MADA = :MADA";
                 command.Parameters.Add("TENDA", OracleDbType.Varchar2).Value = Pro.TENDA;
                 command.Parameters.Add("NGAYBD", OracleDbType.Varchar2).Value = Pro.NGAYBD;
                 command.Parameters.Add("PHONG", OracleDbType.Varchar2).Value = Pro.PHONG;
@@ -89,18 +90,49 @@ namespace App
                 con.Open();
                 OracleCommand oracleCommand = new OracleCommand($"select * from system.phongban", con);
                 OracleDataReader reader = oracleCommand.ExecuteReader();
-                ObservableCollection<string> listMAPB = new ObservableCollection<string>();
+                ObservableCollection<string> list = new ObservableCollection<string>();
                 while (reader.Read())
                 {
                     string MAPB = reader.GetString(0);
-                    listMAPB.Add(MAPB);
+                    list.Add(MAPB);
                 }
-                PHONG_Update.ItemsSource = listMAPB;
-                if (listMAPB.Count > 0)
+                PHONG_Update.ItemsSource = list;
+                if (list.Count > 0)
                 {
-                    int index = listMAPB.IndexOf(Pro.PHONG);
-                    PHONG_Update.SelectedItem = listMAPB[index];
+                    int index = list.IndexOf(Pro.PHONG);
+                    PHONG_Update.SelectedItem = list[index];
                 } 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+        private void loadMada()
+        {
+            string hostName = Environment.MachineName;
+            string conn = $"Data Source={hostName}/XEPDB1;User Id={_Username};Password={_Password};";
+            OracleConnection con = new OracleConnection(conn);
+            try
+            {
+                con.Open();
+                OracleCommand oracleCommand = new OracleCommand($"select Max(MADA) from system.dean", con);
+                OracleDataReader reader = oracleCommand.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    string mada = reader.GetString(0);
+                    int temp = int.Parse(mada);
+                    temp++;
+                    string newMADA = temp.ToString("0000");
+                    MADA.Text = newMADA;
+                }
             }
             catch (Exception ex)
             {

@@ -33,3 +33,7 @@ C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\
 C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\EditProject.g.cs
 C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\EditAssignment.baml
 C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\EditProject.baml
+C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\AddEmployee.g.cs
+C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\EditEmployee.g.cs
+C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\AddEmployee.baml
+C:\Users\LENOVO\Desktop\Database-Administrator\App\App\obj\Debug\net6.0-windows\EditEmployee.baml

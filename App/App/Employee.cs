@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App
 {
-    internal class Employee
+    public class Employee
     {
         public string MANV { get; set; }
         public string TENNV { get; set; }

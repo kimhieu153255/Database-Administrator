@@ -1,0 +1,52 @@
+﻿<Window x:Class="App.EditEmployee"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:App"
+        mc:Ignorable="d"
+        Title="Edit Employee" Height="420" MinWidth="500" Width="600">
+    <StackPanel HorizontalAlignment="Center" Margin="20,0,20,20" x:Name="InsertPanel" Visibility="Visible">
+        <Label Name="LabelInsert" HorizontalAlignment="Center" Height="70" FontSize="30" FontWeight="SemiBold" VerticalContentAlignment="Center">Edit Employee</Label>
+        <StackPanel x:Name="Personel">
+            <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
+                <TextBlock Text="MANV" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                <TextBox Text="{Binding MANV}" IsReadOnly="True" x:Name="MANV"  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center" Margin="0,0,10,0" />
+                <TextBlock Text="TENNV" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                <TextBox  Text="{Binding TENNV}" x:Name="TENNV" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
+                <TextBlock Text="PHAI" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                <ComboBox x:Name="PHAI" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center" Margin="0,0,10,0">
+                    <ComboBoxItem Content="Nam" x:Name="Male"/>
+                    <ComboBoxItem Content="Nu" x:Name="Female"/>
+                </ComboBox>
+                <TextBlock Text="NGAYSINH" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                <TextBox Text="{Binding NGAYSINH}" x:Name="NGAYSINH" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
+                <TextBlock Text="DIACHI" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                <TextBox Text="{Binding DIACHI}" x:Name="DIACHI" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                <TextBlock Text="SODT" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                <TextBox Text="{Binding SODT}" x:Name="SODT" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5">
+                <TextBlock Text="MANQL" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                <TextBox Text="{Binding MANQL}" x:Name="MANQL" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                <TextBlock Text="PHG" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+                <ComboBox x:Name="PHG" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center" />
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,0,0,5" x:Name="Finance" Visibility="Collapsed">
+            <TextBlock Text="LUONG" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+            <TextBox Text="{Binding LUONG}" x:Name="LUONG_Finance" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+            <TextBlock Text="PHUCAP" VerticalAlignment="Center" Margin="0,0,10,0" Width="80" FontSize="16" TextAlignment="Center" FontWeight="SemiBold"/>
+            <TextBox Text="{Binding PHUCAP}" x:Name="PHUCAP_Finance" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"  FontWeight="SemiBold"  Height="45" Width="175" Background="Transparent" VerticalContentAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Height="45" HorizontalAlignment="Center" Margin="0,10,0,5" >
+            <Button Width="100" Content="Update" Height="45" FontSize="16" FontWeight="SemiBold" Click="Ok_Click" Margin="0,0,5,0"/>
+            <Button Width="100" Content="Cancle" Height="45" FontSize="16" FontWeight="SemiBold" Click="Cancle_Click" Margin="5,0,0,0"/>
+        </StackPanel>
+    </StackPanel>
+</Window>
