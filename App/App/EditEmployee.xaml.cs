@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+
 namespace App
 {
     /// <summary>
@@ -91,6 +92,10 @@ namespace App
             string manql = MANQL.Text;
             string phg = (string)PHG.SelectedValue;
 
+            RSA rsa = new RSA(512);
+            string pubkey = rsa.GetPublicKey();
+            rsa.ExportPrivateKeyToFile("../../../keys/" + manv + ".xml");
+
             // check empty
             if (tennv == "" || ngaysinh == "" || sodt == "" || diachi == "")
             {
@@ -149,8 +154,8 @@ namespace App
                 else if(role_user == "Tai chinh")
                 {
                     command.CommandText = $"UPDATE system.nhanvien SET LUONG=:LUONG, PHUCAP=:PHUCAP where MANV=:MANV";
-                    command.Parameters.Add("LUONG", OracleDbType.Int16).Value = int.Parse(luong);
-                    command.Parameters.Add("PHUCAP", OracleDbType.Int16).Value = int.Parse(phucap);
+                    command.Parameters.Add("LUONG", OracleDbType.Raw).Value = rsa.Encrypt(luong);
+                    command.Parameters.Add("PHUCAP", OracleDbType.Raw).Value = rsa.Encrypt(phucap);
                     command.Parameters.Add("MANV", OracleDbType.Varchar2).Value = manv;
                 }
                 int rowsUpdated = command.ExecuteNonQuery();

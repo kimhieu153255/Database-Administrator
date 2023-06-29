@@ -1122,8 +1122,37 @@ namespace App
                     string ngaysinh = reader.GetDateTime(3).ToString("dd/MM/yyyy");
                     string diachi = reader.GetString(4);
                     string sodt = reader.GetString(5);
-                    string luong = reader.IsDBNull(6) ? "NULL" : reader.GetInt32(6).ToString();
-                    string phucap = reader.IsDBNull(7) ? "NULL" : reader.GetInt32(7).ToString();
+
+                    RSA rsa = new RSA(512);
+                    string luong = "NULL";
+                    string phucap = "NULL";
+                    if (rsa.ImportPrivateKeyFromFile("../../../keys/" + manv + ".xml") == 1)
+                    {
+                        if (!reader.IsDBNull(6))
+                        {
+                            long bufferSize = reader.GetBytes(6, 0, null, 0, 0); ;
+                            byte[] buffer = new byte[bufferSize];
+                            reader.GetBytes(6, 0, buffer, 0, (int)bufferSize);
+                            luong = rsa.Decrypt(buffer);
+                        }
+                        else
+                        {
+                            luong = "NULL";
+                        }
+
+                        if (!reader.IsDBNull(7))
+                        {
+                            long bufferSize = reader.GetBytes(7, 0, null, 0, 0);
+                            byte[] buffer = new byte[bufferSize];
+                            reader.GetBytes(7, 0, buffer, 0, (int)bufferSize);
+                            phucap = rsa.Decrypt(buffer);
+                        }
+                        else
+                        {
+                            phucap = "NULL";
+                        }
+                    }
+                    
                     string vaitro = reader.GetString(8);
                     string manql = reader.IsDBNull(9) ? "NULL" : reader.GetString(9);
                     string phg = reader.IsDBNull(10) ? "NULL" : reader.GetString(10);
@@ -1175,8 +1204,36 @@ namespace App
                     string ngaysinh = reader.GetDateTime(3).ToString("dd/MM/yyyy");
                     string diachi = reader.GetString(4);
                     string sodt = reader.GetString(5);
-                    string luong = reader.IsDBNull(6) ? "NULL" : reader.GetInt32(6).ToString();
-                    string phucap = reader.IsDBNull(7) ? "NULL" : reader.GetInt32(7).ToString();
+
+                    RSA rsa = new RSA(512);
+                    string luong = "NULL";
+                    string phucap = "NULL";
+                    if (rsa.ImportPrivateKeyFromFile("../../../keys/" + manv + ".xml") == 1)
+                    {
+                        if (!reader.IsDBNull(6))
+                        {
+                            long bufferSize = reader.GetBytes(6, 0, null, 0, 0); ;
+                            byte[] buffer = new byte[bufferSize];
+                            reader.GetBytes(6, 0, buffer, 0, (int)bufferSize);
+                            luong = rsa.Decrypt(buffer);
+                        }
+                        else
+                        {
+                            luong = "NULL";
+                        }
+
+                        if (!reader.IsDBNull(7))
+                        {
+                            long bufferSize = reader.GetBytes(7, 0, null, 0, 0);
+                            byte[] buffer = new byte[bufferSize];
+                            reader.GetBytes(7, 0, buffer, 0, (int)bufferSize);
+                            phucap = rsa.Decrypt(buffer);
+                        }
+                        else
+                        {
+                            phucap = "NULL";
+                        }
+                    }
                     string vaitro = reader.GetString(8);
                     string manql = reader.IsDBNull(9) ? "NULL" : reader.GetString(9);
                     string phg = reader.IsDBNull(10) ? "NULL" : reader.GetString(10);

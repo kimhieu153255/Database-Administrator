@@ -13,7 +13,7 @@ GRANT EXECUTE ON DBMS_CRYPTO TO system;
 grant all privileges to system;
 /
 
-connect system/153255@localhost:1521/XEPDB1
+connect system/catlonghd1604@localhost:1521/XEPDB1
 /
 
 DROP TABLE USER_AM ;
@@ -592,6 +592,6 @@ GRANT EXECUTE ON SYSTEM.REVOKE_ROLE_TO_USER TO AMDBtest;
 GRANT CREATE SESSION TO AMDBtest WITH admin OPTION;
 
 
-CONN SYSTEM/153255@localhost:1521/XEPDB1;
+CONN SYSTEM/catlonghd1604@localhost:1521/XEPDB1;
 
 select * from system.user_am
