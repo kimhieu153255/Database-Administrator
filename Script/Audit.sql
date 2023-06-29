@@ -1,7 +1,29 @@
+ALTER SESSION SET CONTAINER = CDB$ROOT;
+alter system set audit_trail = DB,EXTENDED scope = spfile;
+shutdown immediate;
+startup;
+/
 ALTER SESSION SET CONTAINER = XEPDB1;
-ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
 /
 
+---Standard audit
+--Audit tat ca cac bang
+AUDIT ALL ON SYSTEM.NHANVIEN BY ACCESS;
+AUDIT ALL ON SYSTEM.PHANCONG BY ACCESS;
+AUDIT ALL ON SYSTEM.DEAN BY ACCESS;
+AUDIT ALL ON SYSTEM.PHONGBAN BY ACCESS;
+--Audit cac hanh vi thanh cong
+AUDIT ALL WHENEVER SUCCESSFUL;
+--Audit cac hanh vi khong thanh cong
+AUDIT ALL WHENEVER NOT SUCCESSFUL;
+/
+
+--Test: select * from SYSTEM.PHANCONG;
+select USERNAME, EXTENDED_TIMESTAMP, OBJ_NAME, SQL_TEXT, ACTION_NAME from dba_audit_trail where obj_name='PHANCONG';
+/
+
+
+--FGA Audit
 --Cau 4a
 
 BEGIN

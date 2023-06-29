@@ -196,6 +196,7 @@ namespace App
                     string MAPB = reader.GetString(0);
                     list.Add(MAPB);
                 }
+                list.Add("NULL");
                 PHG.ItemsSource = list;
                 if (list.Count > 0)
                 {
