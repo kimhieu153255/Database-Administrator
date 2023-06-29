@@ -122,19 +122,19 @@ END;
 BEGIN
     SA_COMPONENTS.CREATE_COMPARTMENT (
         policy_name => 'QLTB',
-        comp_num => 200,
+        comp_num => 20,
         short_name => 'MB',
         long_name => 'MUABAN'
         );
     SA_COMPONENTS.CREATE_COMPARTMENT (
         policy_name => 'QLTB',
-        comp_num => 400,
+        comp_num => 40,
         short_name => 'SX',
         long_name => 'SANXUAT'
         );
     SA_COMPONENTS.CREATE_COMPARTMENT (
         policy_name => 'QLTB',
-        comp_num => 600,
+        comp_num => 60,
         short_name => 'GC',
         long_name => 'GIACONG'
         );
@@ -144,71 +144,21 @@ END;
 BEGIN
     SA_COMPONENTS.CREATE_GROUP (
         policy_name => 'QLTB',
-        group_num => 20,
+        group_num => 200,
         short_name => 'B',
         long_name => 'MIENBAC'
         );
     SA_COMPONENTS.CREATE_GROUP (
         policy_name => 'QLTB',
-        group_num => 40,
+        group_num => 400,
         short_name => 'T',
         long_name => 'MIENTRUNG'
         );
     SA_COMPONENTS.CREATE_GROUP (
         policy_name => 'QLTB',
-        group_num => 60,
+        group_num => 600,
         short_name => 'N',
         long_name => 'MIENNAM'
-        );
-END;
-/
-
-BEGIN
-    SA_POLICY_ADMIN.APPLY_TABLE_POLICY (
-        policy_name => 'QLTB',
-        schema_name => 'SEC_MGR',
-        table_name => 'THONGBAO',
-        table_options => 'NO_CONTROL'
-        );
-END;
-/
-INSERT INTO SEC_MGR.THONGBAO VALUES (1, 'Thong bao den tong giam doc ca 3 mien', CHAR_TO_LABEL('QLTB', 'GD:MB,SX,GC:B,T,N'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (2, 'Thong bao den giam doc mien bac', CHAR_TO_LABEL('QLTB', 'GD:MB,SX,GC:B'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (3, 'Thong bao den giam doc mien trung', CHAR_TO_LABEL('QLTB', 'GD:MB,SX,GC:T'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (4, 'Thong bao den giam doc mien nam', CHAR_TO_LABEL('QLTB', 'GD:MB,SX,GC:N'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (5, 'Thong bao den truong phong mua ban mien bac', CHAR_TO_LABEL('QLTB', 'TP:MB:B'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (6, 'Thong bao den truong phong san xuat mien bac', CHAR_TO_LABEL('QLTB', 'TP:SX:B'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (7, 'Thong bao den truong phong gia cong mien bac', CHAR_TO_LABEL('QLTB', 'TP:GC:B'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (8, 'Thong bao den truong phong mua ban mien trung', CHAR_TO_LABEL('QLTB', 'TP:MB:T'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (9, 'Thong bao den truong phong san xuat mien trung', CHAR_TO_LABEL('QLTB', 'TP:SX:T'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (10, 'Thong bao den truong phong gia cong mien trung', CHAR_TO_LABEL('QLTB', 'TP:GC:T'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (11, 'Thong bao den truong phong mua ban mien nam', CHAR_TO_LABEL('QLTB', 'TP:MB:N'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (12, 'Thong bao den truong phong san xuat mien nam', CHAR_TO_LABEL('QLTB', 'TP:SX:N'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (13, 'Thong bao den truong phong gia cong mien nam', CHAR_TO_LABEL('QLTB', 'TP:GC:N'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (14, 'Thong bao den nhan vien mua ban mien bac', CHAR_TO_LABEL('QLTB', 'NV:MB:B'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (15, 'Thong bao den nhan vien san xuat mien bac', CHAR_TO_LABEL('QLTB', 'NV:SX:B'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (16, 'Thong bao den nhan vien gia cong mien bac', CHAR_TO_LABEL('QLTB', 'NV:GC:B'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (17, 'Thong bao den nhan vien mua ban mien trung', CHAR_TO_LABEL('QLTB', 'NV:MB:T'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (18, 'Thong bao den nhan vien san xuat mien trung', CHAR_TO_LABEL('QLTB', 'NV:SX:T'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (19, 'Thong bao den nhan vien gia cong mien trung', CHAR_TO_LABEL('QLTB', 'NV:GC:T'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (20, 'Thong bao den nhan vien mua ban mien nam', CHAR_TO_LABEL('QLTB', 'NV:MB:N'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (21, 'Thong bao den nhan vien san xuat mien nam', CHAR_TO_LABEL('QLTB', 'NV:SX:N'));
-INSERT INTO SEC_MGR.THONGBAO VALUES (22, 'Thong bao den nhan vien gia cong mien nam', CHAR_TO_LABEL('QLTB', 'NV:GC:N'));
-/
-BEGIN
-    SA_POLICY_ADMIN.REMOVE_TABLE_POLICY (
-        policy_name => 'QLTB',
-        schema_name => 'SEC_MGR',
-        table_name => 'THONGBAO'
-        );
-END;
-/
-BEGIN
-    SA_POLICY_ADMIN.APPLY_TABLE_POLICY (
-        policy_name => 'QLTB',
-        schema_name => 'SEC_MGR',
-        table_name => 'THONGBAO',
-        table_options => 'READ_CONTROL, WRITE_CONTROL'
         );
 END;
 /
@@ -229,8 +179,16 @@ END;
 
 BEGIN
     CREATE_USER_OLS('TONGGIAMDOC');
+    CREATE_USER_OLS('GIAMDOC_MIENBAC');
+    CREATE_USER_OLS('GIAMDOC_MIENTRUNG');
+    CREATE_USER_OLS('GIAMDOC_MIENNAM');
+    CREATE_USER_OLS('TRUONGPHONG_SANXUAT_MIENBAC');
+    CREATE_USER_OLS('TRUONGPHONG_SANXUAT_MIENTRUNG');
     CREATE_USER_OLS('TRUONGPHONG_SANXUAT_MIENNAM');
-    CREATE_USER_OLS('GIAMDOC_CHINHANH_MIENBAC');
+    CREATE_USER_OLS('TRUONGPHONG_MIENNAM');
+    CREATE_USER_OLS('NHANVIEN_MUABAN_MIENBAC');
+    CREATE_USER_OLS('NHANVIEN_SANXUAT_MIENBAC');
+    CREATE_USER_OLS('NHANVIEN_GIACONG_MIENBAC');
 END;
 /
 
@@ -242,16 +200,104 @@ BEGIN
         );
     sa_user_admin.set_user_labels
 		(policy_name    => 'QLTB',
+		user_name       => 'GIAMDOC_MIENBAC',
+		max_read_label  => 'GD:MB,SX,GC:B'
+        );
+    sa_user_admin.set_user_labels
+		(policy_name    => 'QLTB',
+		user_name       => 'GIAMDOC_MIENTRUNG',
+		max_read_label  => 'GD:MB,SX,GC:T'
+        );
+    sa_user_admin.set_user_labels
+		(policy_name    => 'QLTB',
+		user_name       => 'GIAMDOC_MIENNAM',
+		max_read_label  => 'GD:MB,SX,GC:N'
+        );
+    sa_user_admin.set_user_labels
+		(policy_name    => 'QLTB',
+		user_name       => 'TRUONGPHONG_SANXUAT_MIENBAC',
+		max_read_label  => 'TP:SX:B'
+        );
+    sa_user_admin.set_user_labels
+		(policy_name    => 'QLTB',
+		user_name       => 'TRUONGPHONG_SANXUAT_MIENTRUNG',
+		max_read_label  => 'TP:SX:T'
+        );
+    sa_user_admin.set_user_labels
+		(policy_name    => 'QLTB',
 		user_name       => 'TRUONGPHONG_SANXUAT_MIENNAM',
 		max_read_label  => 'TP:SX:N'
         );
     sa_user_admin.set_user_labels
 		(policy_name    => 'QLTB',
-		user_name       => 'GIAMDOC_CHINHANH_MIENBAC',
-		max_read_label  => 'GD:MB,SX,GC:B'
+		user_name       => 'TRUONGPHONG_MIENNAM',
+		max_read_label  => 'TP:MB,SX,GC:N'
+        );
+    sa_user_admin.set_user_labels
+		(policy_name    => 'QLTB',
+		user_name       => 'NHANVIEN_MUABAN_MIENBAC',
+		max_read_label  => 'NV:MB:B'
+        );
+    sa_user_admin.set_user_labels
+		(policy_name    => 'QLTB',
+		user_name       => 'NHANVIEN_SANXUAT_MIENBAC',
+		max_read_label  => 'NV:SX:B'
+        );
+    sa_user_admin.set_user_labels
+		(policy_name    => 'QLTB',
+		user_name       => 'NHANVIEN_GIACONG_MIENBAC',
+		max_read_label  => 'NV:GC:B'
         );
 END;
 /
 
-CONN TONGGIAMDOC/123;
+BEGIN
+    SA_POLICY_ADMIN.APPLY_TABLE_POLICY (
+        policy_name => 'QLTB',
+        schema_name => 'SEC_MGR',
+        table_name => 'THONGBAO',
+        table_options => 'NO_CONTROL'
+        );
+END;
+/
+INSERT INTO SEC_MGR.THONGBAO VALUES (1, 'Thong bao den tat ca giam doc', CHAR_TO_LABEL('QLTB', 'GD:MB,SX,GC'));
+INSERT INTO SEC_MGR.THONGBAO VALUES (2, 'Thong bao den giam doc mien bac', CHAR_TO_LABEL('QLTB', 'GD:MB,SX,GC:B'));
+INSERT INTO SEC_MGR.THONGBAO VALUES (3, 'Thong bao den giam doc mien trung', CHAR_TO_LABEL('QLTB', 'GD:MB,SX,GC:T'));
+INSERT INTO SEC_MGR.THONGBAO VALUES (4, 'Thong bao den giam doc mien nam', CHAR_TO_LABEL('QLTB', 'GD:MB,SX,GC:N'));
+INSERT INTO SEC_MGR.THONGBAO VALUES (5, 'Thong bao den tat ca truong phong phu trach ca 3 linh vuc', CHAR_TO_LABEL('QLTB', 'TP:MB,SX,GC'));
+INSERT INTO SEC_MGR.THONGBAO VALUES (6, 'Thong bao den truong phong san xuat mien bac', CHAR_TO_LABEL('QLTB', 'TP:SX:B'));
+INSERT INTO SEC_MGR.THONGBAO VALUES (7, 'Thong bao den truong phong san xuat mien trung', CHAR_TO_LABEL('QLTB', 'TP:SX:T'));
+INSERT INTO SEC_MGR.THONGBAO VALUES (8, 'Thong bao den truong phong san xuat mien nam', CHAR_TO_LABEL('QLTB', 'TP:SX:N'));
+INSERT INTO SEC_MGR.THONGBAO VALUES (9, 'Thong bao den tat ca nhan vien', CHAR_TO_LABEL('QLTB', 'NV'));
+/
+UPDATE SEC_MGR.THONGBAO SET LABEL_COL = CHAR_TO_LABEL('QLTB', 'GD:MB,SX,GC') WHERE MATB = 1;
+BEGIN
+    SA_POLICY_ADMIN.REMOVE_TABLE_POLICY (
+        policy_name => 'QLTB',
+        schema_name => 'SEC_MGR',
+        table_name => 'THONGBAO'
+        );
+END;
+/
+BEGIN
+    SA_POLICY_ADMIN.APPLY_TABLE_POLICY (
+        policy_name => 'QLTB',
+        schema_name => 'SEC_MGR',
+        table_name => 'THONGBAO',
+        table_options => 'LABEL_DEFAULT, READ_CONTROL, WRITE_CONTROL'
+        );
+END;
+/
+
+Conn TONGGIAMDOC/123@localhost:1521/XEPDB1;
+select * from sec_mgr.thongbao;
+Conn TRUONGPHONG_SANXUAT_MIENNAM/123@localhost:1521/XEPDB1;
+select * from sec_mgr.thongbao;
+Conn GIAMDOC_MIENBAC/123@localhost:1521/XEPDB1;
+select * from sec_mgr.thongbao;
+Conn TRUONGPHONG_MIENNAM/123@localhost:1521/XEPDB1;
+select * from sec_mgr.thongbao;
+Conn TRUONGPHONG_SANXUAT_MIENTRUNG/123@localhost:1521/XEPDB1;
+select * from sec_mgr.thongbao;
+Conn GIAMDOC_MIENTRUNG/123@localhost:1521/XEPDB1;
 select * from sec_mgr.thongbao;
